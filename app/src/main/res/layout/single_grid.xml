@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="180dp"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:focusable="false"
+        android:id="@+id/pharmacysingleimage"
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:src="@drawable/camera"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="3"
+            android:gravity="center"
+            android:id="@+id/pharmacysingletextview"
+            android:layout_gravity="center_horizontal"
+            android:text="textdate"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:visibility="gone"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:id="@+id/pharmacysingleuid"
+            android:layout_gravity="center_horizontal"
+            android:text="textdate"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:visibility="gone"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:id="@+id/pharmacysinglepresdata"
+            android:layout_gravity="center_horizontal"
+            android:text="textdate"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:visibility="gone"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:id="@+id/pharmacysingleimageurl"
+            android:layout_gravity="center_horizontal"
+            android:text="textdate"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:focusable="true"
+            android:clickable="true"
+            android:id="@+id/deletepharmacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete"/>
+    </LinearLayout>
+
+
+</LinearLayout>

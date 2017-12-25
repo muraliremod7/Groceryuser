@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<EditText
+    android:hint="Enter Order Name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/getlorderName"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/textpres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter below how many days you want this prescription"/>
+    <EditText
+        android:visibility="gone"
+        android:hint="Enter Order Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/getlorderdesc"/>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelOrder"
+            android:background="@color/buttoncolor"
+            android:text="Cancel"
+            android:textColor="@color/white"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="2dp"/>
+        <Button
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmOrder"
+            android:background="@color/buttoncolor"
+            android:text="Ok"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+</LinearLayout>

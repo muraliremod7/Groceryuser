@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textcolor"
+    android:layout_margin="10dp"
+    android:id="@+id/vegetable"
+    android:orientation="vertical">
+    <ImageView
+        android:src="@drawable/fruitsandvegetables"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/singleprimage"/>
+
+    <TextView
+        android:id="@+id/singlepname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fruits"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs."
+                android:textStyle="bold"
+                android:layout_gravity="left|center"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/singlepdiscprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="56"
+                android:textStyle="bold"
+                android:layout_gravity="left|center"
+                android:textSize="25sp"/>
+        </LinearLayout>
+
+<LinearLayout
+    android:background="@color/buttoncolor"
+    android:layout_marginRight="20dp"
+    android:layout_gravity="right"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:clickable="true"
+        android:id="@+id/singleDecrese"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/minus"
+        android:backgroundTint="@color/white"/>
+    <TextView
+        android:id="@+id/singleQuantity"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:clickable="true"
+        android:id="@+id/singleIncrease"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/plus"
+        android:backgroundTint="@color/white"/>
+</LinearLayout>
+    </LinearLayout>
+<TextView
+    android:layout_marginTop="20dp"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ABOUT"
+    android:textSize="20sp"
+    android:textStyle="bold"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#B7B7B7"/>
+<TextView
+    android:layout_marginTop="10dp"
+    android:id="@+id/singleproductDescription"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Fresho is our brand of fresh fruits and vegetables which are individually handpicked everyday by our experienced and technically competent buyers. Our buying, storing and packaging processes are tailored to ensure that only the fresh, nutrient dense, healthy and delicious produce reaches your doorstep. We guarantee the quality of all Fresho products. If you're not satisfied with the freshness of the items, you can hand them back to our Customer Experience Executive (CEE) for a full refund. Royal gala apples are bright red, thin skinned, white fleshed fruits with a mild sweet flavour and are native to New Zealand. "/>
+<Button
+    android:clickable="true"
+    android:padding="20dp"
+    android:background="@drawable/button_bg"
+    android:layout_marginTop="20dp"
+    android:layout_gravity="center"
+    android:id="@+id/singleaddtoCart"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Add To cart"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

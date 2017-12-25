@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+            android:icon="@drawable/homee"
+        android:iconTint="@color/colorPrimary"
+          android:id="@+id/navhome"
+          />
+
+    <item android:title="Categories"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/categoryy"
+          android:id="@+id/navcategories"
+          />
+
+    <item android:title="Pharmacy"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/prescription"
+          android:id="@+id/navpharmacy"
+          />
+    <item android:title="My Account"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/myprofile"
+        android:id="@+id/navmyprofile"
+        />
+    <item android:title="My Orders"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/myorders"
+        android:id="@+id/navmyorders"
+        />
+    <item android:title="Delivery Address"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/deliveryaddress"
+        android:id="@+id/deliveryAddress"
+        />
+    <item android:title="Contact Us"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/phone"
+        android:id="@+id/navcontactus"
+        />
+
+    <item android:title="SignOut"
+        android:iconTint="@color/colorPrimary"
+        android:icon="@drawable/signout"
+        android:id="@+id/navsignout"
+        />
+
+</menu>

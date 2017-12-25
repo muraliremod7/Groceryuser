@@ -1,0 +1,202 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="false"
+    android:clickable="false"
+    android:id="@+id/li"
+    android:layout_margin="5dp"
+    android:focusableInTouchMode="false"
+    android:orientation="vertical">
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/productimage"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center">
+        </ImageView>
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="product name"
+                android:id="@+id/productname" />
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:id="@+id/productquantity" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kg"
+                    android:id="@+id/cartmeasure" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs." />
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="280"
+                    android:id="@+id/vendoreprice" />
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs."
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:gravity="center|right"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="price"
+                    android:id="@+id/pdiscprice" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:id="@+id/calculation"
+                    android:background="@color/buttoncolor"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp">
+                    <TextView
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/minus"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/minus"
+                        android:backgroundTint="@color/white"/>
+                    <TextView
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:id="@+id/plus"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/plus"
+                        android:backgroundTint="@color/white"/>
+                </RelativeLayout>
+                <Button
+                    android:layout_weight="3"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="@color/buttoncolor"
+                    android:id="@+id/additem"
+                    android:text="Add"
+                    android:textColor="@color/white"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="25dp"
+                    android:layout_height="35dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/pId"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/productDesc"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:text="pid"
+    android:id="@+id/pruid"
+    android:layout_centerHorizontal="true"
+    android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/primageUrl"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/puid"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/prpq"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="pid"
+        android:id="@+id/ppid"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+</LinearLayout>

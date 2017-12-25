@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B7B7B7"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.indianservers.onlinegrocery.CheckOutActivity">
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="match_parent"
+        android:id="@+id/checkoutitems"
+        android:layout_centerHorizontal="true"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:choiceMode="singleChoice"
+        android:layout_below="@+id/view3"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+<RelativeLayout
+    android:background="@color/buttoncolor"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/totalAmount"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="51dp"
+        android:layout_marginStart="51dp" />
+    <Button
+        android:layout_alignParentRight="true"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        android:textColor="@color/textcolor"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginBottom="5dp"
+        android:drawableRight="@drawable/back"
+        android:background="@android:color/transparent"
+        android:id="@+id/checkoutplaceorder"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
+</RelativeLayout>

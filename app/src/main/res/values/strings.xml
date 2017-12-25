@@ -1,0 +1,148 @@
+<resources>
+    <string name="app_name">Kirana Mart</string>
+    <string name="loginhere"><b>LOGIN HERE</b></string>
+    <string name="register"><b>Not Yet Register? <u>Click To Register</u></b></string>
+    <string name="login"><b><u>Click To Login</u></b></string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="title_wallet">Wallet</string>
+    <string name="title_wbspecials">WB Specials</string>
+    <string name="title_myoredrs">My Orders</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_home">Home</string>
+
+
+    <string-array name="Area">
+
+        <item>Select Your Location</item>
+        <item>A S Rao Nagar</item>
+        <item>Abids</item>
+        <item>Adibatla</item>
+        <item>Alwal</item>
+        <item>Amberpet</item>
+        <item>Ameenpur</item>
+        <item>Ameerpet</item>
+        <item>Appa Junction</item>
+        <item>Attapur</item>
+        <item>Bachupally</item>
+        <item>Bandlaguda</item>
+        <item>Banjara Hills</item>
+        <item>Beeramguda</item>
+        <item>Begampet</item>
+        <item>Bibinagar</item>
+        <item>Boduppal</item>
+        <item>Bolaram</item>
+        <item>Bowenpally</item>
+        <item>Chandanagar</item>
+        <item>Chintal</item>
+        <item>Dammaiguda</item>
+        <item>East-Marredpally</item>
+        <item>ECIL</item>
+        <item>Erragadda</item>
+        <item>Gachibowli</item>
+        <item>Gajularamaram</item>
+        <item>Ghatkeswar</item>
+        <item>Gopanpally</item>
+        <item>Habasiguda</item>
+        <item>Hafeezpet</item>
+        <item>Hayat Nagar</item>
+        <item>Hi Tech City</item>
+        <item>Himayat Nagar</item>
+        <item>Jubilee Hills</item>
+        <item>Kachiguda</item>
+        <item>Kapra</item>
+        <item>Khairatabad</item>
+        <item>Kokapet</item>
+        <item>Kompally</item>
+        <item>Kondapur</item>
+        <item>Kothaguda</item>
+        <item>Kothapet</item>
+        <item>KPHB</item>
+        <item>Kukatpally</item>
+        <item>L B Nagar</item>
+        <item>LangarHouze</item>
+        <item>LingamPally</item>
+        <item>Madhapur</item>
+        <item>Madura Nagar</item>
+        <item>Madinaguda</item>
+        <item>Malakpet</item>
+        <item>Malkajgiri</item>
+        <item>Mallapur</item>
+        <item>Manikonda</item>
+        <item>Masab Tank</item>
+        <item>Medchal</item>
+        <item>Mehadipatnam</item>
+        <item>Miyapur</item>
+        <item>Moti Nagar</item>
+        <item>Nacharam</item>
+        <item>Nagaram</item>
+        <item>Nagole</item>
+        <item>Nallagandla</item>
+        <item>Nallakunta</item>
+        <item>Nanakramguda</item>
+        <item>Narayanaguda</item>
+        <item>Narsingi</item>
+        <item>Neredmet</item>
+        <item>Nizampet</item>
+        <item>Nizampet Road</item>
+        <item>Old BowenPally</item>
+        <item>Pocharam</item>
+        <item>Pragathi Nagar</item>
+        <item>Puppalaguda</item>
+        <item>Quthdullapur</item>
+        <item>Rajendra Nagar</item>
+        <item>Ramanthapur</item>
+        <item>Sainikpuri</item>
+        <item>Sanat Nagr</item>
+        <item>Sanjeeva Reddy Nagar</item>
+        <item>Saroor Nagar</item>
+        <item>Secundrabad</item>
+        <item>Serilingampally</item>
+        <item>Shadnagar</item>
+        <item>Shaikpet</item>
+        <item>Shamhabad</item>
+        <item>Somajiguda</item>
+        <item>Srinagar Colony</item>
+        <item>Srisailam Highway</item>
+        <item>Tarnaka</item>
+        <item>Tolichowki</item>
+        <item>Tirumalagiri</item>
+        <item>Uppal</item>
+        <item>Vanasthalipuram</item>
+        <item>West Marredupally</item>
+        <item>Yapral</item>
+        <item>Yousufguda</item>
+    </string-array>
+    <string-array name="Locations">
+        <item>Telengana</item>
+        <item>AndhraPradesh</item>
+    </string-array>
+    <string-array name="nav_drawer_labels">
+        <item>Home</item>
+        <item>Categories</item>
+        <item>My Orders</item>
+        <item>WB Specials</item>
+        <item>Wallet</item>
+        <item>SignOut</item>
+    </string-array>
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_account_balance_wallet_black_24dp</item>
+        <item>@drawable/ic_profile</item>
+    </array>
+    <string-array name="times_slot">
+        <item>Choose TimeSlot</item>
+        <item>7AM - 10AM</item>
+        <item>10AM - 1PM</item>
+        <item>1PM - 5PM</item>
+        <item>5PM - 9PM</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

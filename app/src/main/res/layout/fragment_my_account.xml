@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/profilelinearsnackbar"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/profileedit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:hint="Enter Your Name"
+                android:id="@+id/profileName"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="10dp"
+                android:hint="Enter Your Email"
+                android:id="@+id/profileEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:inputType="number"
+                android:layout_marginTop="10dp"
+                android:hint="Enter Your Mobile"
+                android:id="@+id/profileMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/saveData"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/buttoncolor"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="visible"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:id="@+id/profiledata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:layout_width="230dp"
+                android:layout_height="150dp">
+                <ImageView
+                    android:id="@+id/capture"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/camera"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+                <ImageView
+                    android:src="@drawable/ic_profile"
+                    android:layout_gravity="center"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:id="@+id/profilepic"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/capture"
+                    android:layout_toStartOf="@+id/capture" />
+            </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:gravity="left"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textStyle="bold"
+                android:textSize="17sp" />
+            <TextView
+                android:gravity="left"
+                android:id="@+id/profilenametext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="17sp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#B7B7B7"/>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:gravity="left"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold"
+                android:textSize="17sp" />
+            <TextView
+                android:gravity="left"
+                android:id="@+id/profileemailtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="17sp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#B7B7B7"/>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:gravity="left"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Mobile"
+                android:textStyle="bold"
+                android:textSize="17sp" />
+            <TextView
+                android:gravity="left"
+                android:id="@+id/profilemobiletext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="17sp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#B7B7B7"/>
+        <Button
+            android:layout_marginTop="20sp"
+            android:id="@+id/profilechangeprofile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/buttoncolor"
+            android:textColor="@color/white"
+            android:text="Update Profile"/>
+        <Button
+            android:layout_marginTop="20sp"
+            android:id="@+id/profilechangepassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/buttoncolor"
+            android:textColor="@color/white"
+            android:text="Update Password"/>
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>

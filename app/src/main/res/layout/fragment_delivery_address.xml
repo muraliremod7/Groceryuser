@@ -1,0 +1,117 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.indianservers.onlinegrocery.fragment.DeliveryAddressFragment"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:background="#B7B7B7"
+        android:visibility="visible"
+        android:id="@+id/deliveryaddresslayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="10dp"
+            android:id="@+id/deliveryRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+<LinearLayout
+    android:visibility="gone"
+    android:id="@+id/addresseditlayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:hint="Enter Address Nickname"
+                android:id="@+id/addressnicknameedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"/>
+            <EditText
+                android:hint="Enter Person Name"
+                android:id="@+id/addresspersonnameedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter House No"
+                android:id="@+id/addresshousenoedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter Street Name"
+                android:id="@+id/addressstreetedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter Area"
+                android:id="@+id/addressareaedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter Appartment Name"
+                android:id="@+id/addressapartmentnameedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter LandMark"
+                android:id="@+id/addresslandmarkedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter City"
+                android:inputType="text"
+                android:id="@+id/addresscityedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter Pincode"
+                android:inputType="number"
+                android:id="@+id/addresspincodeedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:hint="Enter Mobile"
+                android:inputType="number"
+                android:id="@+id/addressmobileedit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+            <Button
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/saveAddress"
+                android:text="Save Address"
+                android:background="@color/buttoncolor"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Cost"
+            android:typeface="sans"
+            android:id="@+id/orderCost"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Order Date"
+            android:typeface="sans"
+            android:id="@+id/orderDate"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Order Slot"
+            android:typeface="sans"
+            android:id="@+id/orderSlot"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Status"
+            android:typeface="sans"
+            android:id="@+id/orderStatus"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:text="Dispute"
+            android:textSize="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="goToDispute"
+            android:textColor="@color/textcolor"
+            android:background="@drawable/custombutton"
+            android:id="@+id/orderDispute"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/orderId"
+            android:visibility="gone"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:visibility="gone"
+            android:id="@+id/disprname"
+            android:layout_alignBottom="@+id/orderId"
+            android:layout_toRightOf="@+id/orderId"
+            android:layout_toEndOf="@+id/orderId" />
+    </LinearLayout>
+</LinearLayout>
