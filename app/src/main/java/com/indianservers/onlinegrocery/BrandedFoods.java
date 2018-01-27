@@ -44,8 +44,8 @@ public class BrandedFoods extends Fragment {
     public BrandedFoods() {
 
     }
-    public static Beverages newInstance() {
-        Beverages fragment = new Beverages();
+    public static BrandedFoods newInstance() {
+        BrandedFoods fragment = new BrandedFoods();
         return fragment;
     }
     @Override

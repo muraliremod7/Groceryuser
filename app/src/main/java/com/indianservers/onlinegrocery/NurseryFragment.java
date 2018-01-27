@@ -13,9 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -27,13 +24,11 @@ import java.util.ArrayList;
 import adapter.GridAdapter;
 import model.CenterRepository;
 import model.ProductCommonClass;
-import model.ProfileCommonClass;
-import model.entities.Product;
 
 /**
  * Created by Ratan on 7/29/2015.
  */
-public class EggMeatFishFragment extends Fragment {
+public class NurseryFragment extends Fragment {
     private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
     private GridAdapter gridAdapter;
     public static SharedPreferences sskey;
@@ -41,16 +36,16 @@ public class EggMeatFishFragment extends Fragment {
     String SSkey;
     private Firebase firebase;
     private ProgressDialog mProgressDialog;
-    public EggMeatFishFragment() {
+    public NurseryFragment() {
 
     }
-    public static EggMeatFishFragment newInstance() {
-        EggMeatFishFragment fragment = new EggMeatFishFragment();
+    public static NurseryFragment newInstance() {
+        NurseryFragment fragment = new NurseryFragment();
         return fragment;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_egg_meat_fish,container,false);
+        View view = inflater.inflate(R.layout.fragment_nursery,container,false);
         gridview = (RecyclerView) view.findViewById(R.id.eggmeatgridview);
         gridview.setAlpha(0.9f);
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -60,7 +55,7 @@ public class EggMeatFishFragment extends Fragment {
         timerDelayRemoveDialog(15*1000,mProgressDialog);
         mProgressDialog.show();
         Firebase.setAndroidContext(getContext());
-        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"EggsMeatFish");
+        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Nursery");
         refreshdata();
         gridAdapter = new GridAdapter(getActivity(),arrayList);
         gridview.setAdapter(gridAdapter);
@@ -68,7 +63,7 @@ public class EggMeatFishFragment extends Fragment {
         return view;
     }
     public  void refreshdata() {
-        firebase.child("EggsMeatFish").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
+        firebase.child("Nursery").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getupdates(dataSnapshot);

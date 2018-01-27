@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 
 import com.firebase.client.Firebase;
 import com.indianservers.onlinegrocery.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,6 @@ import model.ProductCommonClass;
  */
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> implements
         ItemTouchHelperAdapter {
-    ImageView pimage;
     public Activity activity;
     private Firebase firebase;
     private SharedPreferences sskey;
@@ -80,8 +80,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
         holder.puid.setText(productList.get(position).getPuid());
         holder.pName.setText(productList.get(position).getProductName());
         holder.pPrice.setText(productList.get(position).getProductPrice());
-        holder.pPrice.setPaintFlags(holder.pPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.pdprice.setText(productList.get(position).getProductdPrice());
+        if(productList.get(position).getProductdPrice().equals("")){
+            holder.rs.setVisibility(View.GONE);
+        }else {
+            holder.pPrice.setPaintFlags(holder.pPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         holder.pdesc.setText(productList.get(position).getProductDesc());
         holder.pQuantity.setText(productList.get(position).getProductQuantity());
         holder.pMeasure.setText(productList.get(position).getProductMeasureType());
@@ -92,46 +96,46 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
 
         }
         holder.pimageUrl.setText(productList.get(position).getProductImage());
-        Glide.with(activity)
+        Picasso.with(activity)
                 .load(productList.get(position).getProductImage())
-                .into(pimage);
+                .into(holder.pimage);
         holder.plus.findViewById(R.id.plus).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ProductCommonClass tempObj = productList.get(position);
-               if (CenterRepository.getCenterRepository()
-                       .getListOfProductsInShoppingList().contains(tempObj)) {
+            @Override
+            public void onClick(View v) {
+                ProductCommonClass tempObj = productList.get(position);
+                if (CenterRepository.getCenterRepository()
+                        .getListOfProductsInShoppingList().contains(tempObj)) {
 
-                   //get position of current item in shopping list
-                   int indexOfTempInShopingList = CenterRepository
-                           .getCenterRepository().getListOfProductsInShoppingList()
-                           .indexOf(tempObj);
+                    //get position of current item in shopping list
+                    int indexOfTempInShopingList = CenterRepository
+                            .getCenterRepository().getListOfProductsInShoppingList()
+                            .indexOf(tempObj);
 
-                   // update quanity in shopping list
-                   CenterRepository
-                           .getCenterRepository()
-                           .getListOfProductsInShoppingList()
-                           .get(indexOfTempInShopingList)
-                           .setPrqu(
-                                   String.valueOf(Integer
-                                           .valueOf(tempObj
-                                                   .getPrqu())+1));
+                    // update quanity in shopping list
+                    CenterRepository
+                            .getCenterRepository()
+                            .getListOfProductsInShoppingList()
+                            .get(indexOfTempInShopingList)
+                            .setPrqu(
+                                    String.valueOf(Integer
+                                            .valueOf(tempObj
+                                                    .getPrqu())+1));
 
-                   // update current item quanitity
-                   holder.quantity.setText(tempObj.getPrqu());
+                    // update current item quanitity
+                    holder.quantity.setText(tempObj.getPrqu());
 
-               } else {
+                } else {
 
-                   tempObj.setPrqu(String.valueOf(1));
+                    tempObj.setPrqu(String.valueOf(1));
 
-                   holder.quantity.setText(tempObj.getPrqu());
+                    holder.quantity.setText(tempObj.getPrqu());
 
-                   CenterRepository.getCenterRepository()
-                           .getListOfProductsInShoppingList().add(tempObj);
+                    CenterRepository.getCenterRepository()
+                            .getListOfProductsInShoppingList().add(tempObj);
 
-               }
-           }
-       });
+                }
+            }
+        });
         holder.minus.findViewById(R.id.minus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,10 +239,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
         TextView plus;
         TextView minus;
         Button add;
-
+        TextView rs;
+        ImageView pimage;
         public ViewHolder(View itemView) {
             super(itemView);
-
             pId = (TextView) itemView.findViewById(R.id.pId);
             pName = (TextView) itemView.findViewById(R.id.productname);
             puid = (TextView) itemView.findViewById(R.id.pruid);
@@ -253,6 +257,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
             quantity = (TextView) itemView.findViewById(R.id.quantity);
             plus = (TextView) itemView.findViewById(R.id.plus);
             minus = (TextView) itemView.findViewById(R.id.minus);
+            rs = (TextView)itemView.findViewById(R.id.rs);
             itemView.setOnClickListener(this);
         }
         @Override

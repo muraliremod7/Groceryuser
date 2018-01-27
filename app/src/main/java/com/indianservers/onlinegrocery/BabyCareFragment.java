@@ -113,27 +113,35 @@ public class BabyCareFragment extends Fragment {
             gridview.setHasFixedSize(true);
             gridview.setAdapter(gridAdapter);
             gridAdapter.notifyDataSetChanged();
-//            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    String prname = ((TextView)view.findViewById(R.id.productname)).getText().toString();
-//                    String prprice = ((TextView)view.findViewById(R.id.vendoreprice)).getText().toString();
-//                    String prdprice = ((TextView)view.findViewById(R.id.pdiscprice)).getText().toString();
-//                    String prquantity = ((TextView)view.findViewById(R.id.productquantity)).getText().toString();
-//                    String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
-//                    String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
-//                    String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
-//                    Intent intent = new Intent(getContext(),SingleItemActivity.class);
-//                    intent.putExtra("pname",prname);
-//                    intent.putExtra("pprice",prprice);
-//                    intent.putExtra("pdprice",prdprice);
-//                    intent.putExtra("pquantity",prquantity);
-//                    intent.putExtra("pmeaure",prmeasure);
-//                    intent.putExtra("pdesc",prdesc);
-//                    intent.putExtra("imgurl",primageUrl);
-//                    startActivity(intent);
-//                }
-//            });
+            gridAdapter.SetOnItemClickListener(new GridAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    final String prname = ((TextView)view.findViewById(R.id.productname)).getText().toString();
+                    final String prprice = ((TextView)view.findViewById(R.id.vendoreprice)).getText().toString();
+                    final String prdprice = ((TextView)view.findViewById(R.id.pdiscprice)).getText().toString();
+                    final String prquantity = ((TextView)view.findViewById(R.id.productquantity)).getText().toString();
+                    final String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
+                    final String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
+                    final String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
+                    final String puid = ((TextView)view.findViewById(R.id.pruid)).getText().toString();
+                    final String ppid = ((TextView)view.findViewById(R.id.ppid)).getText().toString();
+                    final String prpq = ((TextView)view.findViewById(R.id.prpq)).getText().toString();
+                    final String prfinalQunatity = ((TextView)view.findViewById(R.id.quantity)).getText().toString();
+                    Intent intent = new Intent(getContext(),SingleItemActivity.class);
+                    intent.putExtra("pname",prname);
+                    intent.putExtra("pprice",prprice);
+                    intent.putExtra("pdprice",prdprice);
+                    intent.putExtra("pquantity",prquantity);
+                    intent.putExtra("pmeaure",prmeasure);
+                    intent.putExtra("pdesc",prdesc);
+                    intent.putExtra("imgurl",primageUrl);
+                    intent.putExtra("puid",puid);
+                    intent.putExtra("quantity",prfinalQunatity);
+                    intent.putExtra("prpq",prpq);
+                    intent.putExtra("ppid",ppid);
+                    startActivity(intent);
+                }
+            });
 
         }else
         {

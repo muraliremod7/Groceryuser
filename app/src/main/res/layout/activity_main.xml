@@ -14,9 +14,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:id="@+id/toolbar"
+        android:id="@+id/maintoolbar"
         app:layout_scrollFlags="scroll|enterAlways"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/subcategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/im"
+                android:layout_toRightOf="@+id/im"
+                android:text="Kirana Mart"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+            <ImageView
+                android:tint="#ffff"
+                android:id="@+id/checkoutmain"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/checkout" />
+        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.DrawerLayout

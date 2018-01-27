@@ -32,8 +32,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextView loginhere;
     private FirebaseAuth auth;
     private ProgressDialog progressBar;
-    private ArrayAdapter<String> adapter;
-    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

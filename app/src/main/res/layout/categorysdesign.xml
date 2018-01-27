@@ -101,7 +101,7 @@
                     android:textSize="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bakery, Cakes Dairy"/>
+                    android:text="Rice Bags"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -264,7 +264,7 @@
                     android:textSize="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Eggs, Meat, Fish"/>
+                    android:text="Nursery"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -288,7 +288,31 @@
             android:id="@+id/pharmacy"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/pharma"/>
+            android:src="@drawable/pharmacy"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@color/buttoncolor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="Services"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/services"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/pharmacy"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="100dp"/>

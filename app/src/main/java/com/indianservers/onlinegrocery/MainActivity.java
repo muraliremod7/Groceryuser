@@ -16,9 +16,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.indianservers.onlinegrocery.fragment.ContactUsFragment;
@@ -30,22 +32,27 @@ import java.math.BigInteger;
 
 import services.SessionManager;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     private SharedPreferences data;
     SessionManager sessionManager;
     private TextView checkOutAmount, itemCountTextView;
+    private Toolbar toolbar;
+    private ImageView checkoutImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        toolbar = (Toolbar)findViewById(R.id.maintoolbar);
+        setSupportActionBar(toolbar); // Setting/replace toolbar as the ActionBar
+        toolbar.setTitle("Kirana Mart");
         sessionManager = new SessionManager(MainActivity.this);
-        if(sessionManager.checkLogin())
-            finish();
+        checkoutImage = (ImageView)findViewById(R.id.checkoutmain);
+        checkoutImage.setOnClickListener(this);
+
         /**
          *Setup the DrawerLayout and NavigationView
          */
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity{
 
         TextView textView = (TextView)headerView.findViewById(R.id.useremail);
         String email = data.getString("email","0");
+        if(sessionManager.checkLogin()||email.equals("0"))
+            finish();
         textView.setText(email);
         /**
          * Lets inflate the very first fragment
@@ -120,9 +129,6 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Setup Drawer Toggle of the Toolbar
          */
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Kirana Mart");
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
                 R.string.app_name);
 
@@ -175,11 +181,6 @@ public class MainActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.homefragmentmenu, menu);
-        MenuItem itemCart = menu.findItem(R.id.cart);
-        LayerDrawable icon = (LayerDrawable) itemCart.getIcon();
-        SharedPreferences item =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String itemlength = item.getString("Length","0");
-        setBadgeCount(getApplicationContext(), icon, itemlength);
         return true;
     }
 
@@ -199,21 +200,51 @@ public class MainActivity extends AppCompatActivity{
         }
         return false;
     }
-    public static void setBadgeCount(Context context, LayerDrawable icon, String count) {
 
-        BadgeDrawable badge;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitByBackKey();
 
-        // Reuse drawable if possible
-        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
-        if (reuse != null && reuse instanceof BadgeDrawable) {
-            badge = (BadgeDrawable) reuse;
-        } else {
-            badge = new BadgeDrawable(context);
+            //moveTaskToBack(false);
+
+            return true;
         }
-
-        badge.setCount(count);
-        icon.mutate();
-        icon.setDrawableByLayerId(R.id.ic_badge, badge);
+        return super.onKeyDown(keyCode, event);
     }
 
+    protected void exitByBackKey() {
+
+        AlertDialog alertbox = new AlertDialog.Builder(this,R.style.MyAlertDialogStyle)
+                .setMessage("Do you want to exit application?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    // do something when the button is clicked
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        finish();
+                        //close();
+
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                    // do something when the button is clicked
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.checkoutmain:
+                Intent intent = new Intent(this, CheckOutActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

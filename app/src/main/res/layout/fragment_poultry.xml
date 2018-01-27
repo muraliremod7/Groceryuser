@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.indianservers.onlinegrocery.Beverages"
-    android:background="@color/textcolor">
+    android:background="@drawable/fruitsandvegetables">
 
     <android.support.v7.widget.RecyclerView
+        android:background="#E8E8E8"
         android:columnWidth="150dp"
         android:drawSelectorOnTop="true"
         android:verticalSpacing="5dp"

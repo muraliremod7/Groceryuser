@@ -1,7 +1,5 @@
 package adapter;
 
-import com.indianservers.onlinegrocery.fragment.PlaceOrderFragment;
-
 /**
  * Created by Prabhu on 12-12-2017.
  */
@@ -11,7 +9,7 @@ public class PlaceOrderCommonClass {
 
     }
 
-    public PlaceOrderCommonClass(String uid, String orderid, String orderitems, String orderdate, String ordertime, String orderpayableamount,String status) {
+    public PlaceOrderCommonClass(String uid, String orderid, String orderitems, String deliveryaddress,String orderdate, String ordertime, String orderpayableamount,String status) {
         this.uid = uid;
         this.orderid = orderid;
         this.orderitems = orderitems;
@@ -19,9 +17,20 @@ public class PlaceOrderCommonClass {
         this.ordertime = ordertime;
         this.orderpayableamount = orderpayableamount;
         this.status = status;
+        this.deliveryaddress = deliveryaddress;
     }
 
     private String uid;
+
+    public String getKid() {
+        return kid;
+    }
+
+    public void setKid(String kid) {
+        this.kid = kid;
+    }
+
+    private String kid;
 
     public String getStatus() {
         return status;
@@ -86,4 +95,14 @@ public class PlaceOrderCommonClass {
     private String orderdate;
     private String ordertime;
     private String orderpayableamount;
+
+    public String getDeliveryaddress() {
+        return deliveryaddress;
+    }
+
+    public void setDeliveryaddress(String deliveryaddress) {
+        this.deliveryaddress = deliveryaddress;
+    }
+
+    private String deliveryaddress;
 }

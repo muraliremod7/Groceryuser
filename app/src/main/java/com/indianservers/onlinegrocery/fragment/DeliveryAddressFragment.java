@@ -2,12 +2,15 @@ package com.indianservers.onlinegrocery.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -51,6 +55,7 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
     private String mParam1;
     private String mParam2;
     private Firebase firebase;
+    private Button addnewAddress, cancelAddress;
     private EditText nickname,personname,houseno,street,area,apartment,landmark,city,pincode,mobile;
     private ProgressDialog progressDialog;
     private ArrayList<AddressCommonClass> commonClasses = new ArrayList<>();
@@ -94,8 +99,12 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
         pincode = (EditText)view.findViewById(R.id.addresspincodeedit);
         mobile = (EditText)view.findViewById(R.id.addressmobileedit);
         recyclerView = (RecyclerView)view.findViewById(R.id.deliveryRecyclerview);
+        addnewAddress = (Button)view.findViewById(R.id.addNewaddress);
+        addnewAddress.setOnClickListener(this);
         Button button = (Button)view.findViewById(R.id.saveAddress);
         button.setOnClickListener(this);
+        cancelAddress = (Button)view.findViewById(R.id.cancelAddress);
+        cancelAddress.setOnClickListener(this);
             Firebase.setAndroidContext(getContext());
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
         profileuid = sskey.getString("uid","0");
@@ -193,8 +202,68 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
 
         addressAdapter.SetOnItemClickListener(new AddressAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(final View view, int position) {
+                AlertDialog alertbox = new AlertDialog.Builder(getContext(),R.style.MyAlertDialogStyle)
+                        .setMessage("Do you want Choose this your Default address")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
+                            // do something when the button is clicked
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                //close();
+                                final AddressCommonClass aClass = new AddressCommonClass();
+
+                        String aid = ((TextView)view.findViewById(R.id.aid)).getText().toString();
+                        String anName = ((TextView)view.findViewById(R.id.addressnickname)).getText().toString();
+                        String apname = ((TextView)view.findViewById(R.id.addressName)).getText().toString();
+                        String ahouseno = ((TextView)view.findViewById(R.id.addressHouseno)).getText().toString();
+                        String astreetno = ((TextView)view.findViewById(R.id.addressStreet)).getText().toString();
+                        String aArea = ((TextView)view.findViewById(R.id.addressArea)).getText().toString();
+                        String aApname = ((TextView)view.findViewById(R.id.addressAppartmentName)).getText().toString();
+                        String alandmark = ((TextView)view.findViewById(R.id.addressLandmark)).getText().toString();
+                        final String aCity = ((TextView)view.findViewById(R.id.addressCity)).getText().toString();
+                        String aPincode = ((TextView)view.findViewById(R.id.addressPincode)).getText().toString();
+                        String aMobile = ((TextView)view.findViewById(R.id.addressmobile)).getText().toString();
+                                aClass.setAddpid(aid);
+                                aClass.setAddnickname(anName);
+                                aClass.setAddpersoname(apname);
+                                aClass.setAddhouseno(ahouseno);
+                                aClass.setAddstreetname(astreetno);
+                                aClass.setAddarea(aArea);
+                                aClass.setAddapartmentno(aApname);
+                                aClass.setAddlandmark(alandmark);
+                                aClass.setAddcity(aCity);
+                                aClass.setAddpincode(aPincode);
+                                aClass.setAddmobile(aMobile);
+
+                                firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"ConfAddress"+"/"+profileuid+"/"+profileuid);
+                                firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for (DataSnapshot ds: dataSnapshot.getChildren()){
+                                                firebase.child(ds.getKey()).setValue(aClass);
+                                            }
+                                        }else {
+                                            firebase.push().child("").setValue(aClass);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+
+                                    }
+                                });
+
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                            // do something when the button is clicked
+                            public void onClick(DialogInterface dialog, int arg1) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -224,6 +293,39 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.cancelAddress:
+                View forgotLayouttt = getActivity().findViewById(R.id.addresseditlayout);
+                forgotLayouttt.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
+                forgotLayouttt.setVisibility(View.GONE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+
+                        }catch (NullPointerException e){
+                            getActivity().findViewById(R.id.deliveryaddresslayout).setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, 500);
+                profileData();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                // Replace the contents of the container with the new fragment
+                ft.replace(R.id.containerView, new DeliveryAddressFragment());
+                // or ft.add(R.id.your_placeholder, new FooFragment());
+                // Complete the changes added above
+                ft.commit();
+                break;
+            case R.id.addNewaddress:
+                View forgotLayout = getActivity().findViewById(R.id.addresseditlayout);
+                forgotLayout.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
+                forgotLayout.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().findViewById(R.id.deliveryaddresslayout).setVisibility(View.GONE);
+                    }
+                }, 500);
+                break;
             case R.id.saveAddress:
             AddressCommonClass aClass = new AddressCommonClass();
                 aClass.setAddnickname(nickname.getText().toString());
@@ -239,16 +341,26 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
                 firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Address"+"/"+profileuid+"/"+profileuid);
                 firebase.push().child("").setValue(aClass);
 
-                View forgotLayout = getActivity().findViewById(R.id.addresseditlayout);
-                forgotLayout.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
-                forgotLayout.setVisibility(View.GONE);
+                View forgotLayoutt = getActivity().findViewById(R.id.addresseditlayout);
+                forgotLayoutt.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
+                forgotLayoutt.setVisibility(View.GONE);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getActivity().findViewById(R.id.deliveryaddresslayout).setVisibility(View.VISIBLE);
+                        try{
+
+                        }catch (NullPointerException e){
+                            getActivity().findViewById(R.id.deliveryaddresslayout).setVisibility(View.VISIBLE);
+                        }
                     }
                 }, 500);
                 profileData();
+                FragmentTransaction ftt = getFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+                ftt.replace(R.id.containerView, new DeliveryAddressFragment());
+// or ft.add(R.id.your_placeholder, new FooFragment());
+// Complete the changes added above
+                ftt.commit();
                 Toast.makeText(getContext(),"Address Saved",Toast.LENGTH_SHORT).show();
                 break;
         }

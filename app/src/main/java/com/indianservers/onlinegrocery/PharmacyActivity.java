@@ -71,10 +71,10 @@ public class PharmacyActivity extends AppCompatActivity implements View.OnClickL
         sskey = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sskey.getString("uid","0");
         storageReference = FirebaseStorage.getInstance().getReference();
-        uploadPrescription = (LinearLayout)findViewById(R.id.uploadprec);
-        uploadPrescription.setOnClickListener(this);
-        refillOrder = (LinearLayout)findViewById(R.id.refillorder);
-        refillOrder.setOnClickListener(this);
+//        uploadPrescription = (LinearLayout)findViewById(R.id.uploadprec);
+//        uploadPrescription.setOnClickListener(this);
+//        refillOrder = (LinearLayout)findViewById(R.id.refillorder);
+//        refillOrder.setOnClickListener(this);
         progressDialog = new ProgressDialog(PharmacyActivity.this);
         Firebase.setAndroidContext(PharmacyActivity.this);
     }
@@ -92,12 +92,12 @@ public class PharmacyActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.uploadprec:
-                selectImage();
-                break;
-            case R.id.refillorder:
-                startActivity(new Intent(PharmacyActivity.this,ProceedPharmacyActivity.class));
-                break;
+//            case R.id.uploadprec:
+//                selectImage();
+//                break;
+//            case R.id.refillorder:
+//                startActivity(new Intent(PharmacyActivity.this,ProceedPharmacyActivity.class));
+//                break;
         }
     }
     public void selectImage() {

@@ -1,72 +1,56 @@
 package com.indianservers.onlinegrocery;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
+import adapter.GridItemView;
 import adapter.GridViewAdapter;
+import es.dmoral.toasty.Toasty;
 import model.CenterRepository;
-import model.GridviewModel;
 import model.PharmacyModel;
 import model.PharmacyModelOne;
 
 public class ProceedPharmacyActivity extends AppCompatActivity implements View.OnClickListener{
     private GridViewAdapter adapter;
     private GridView gridView;
-    private String[] FilePathStrings;
-    private String[] FileNameStrings;
+    private ArrayList<Integer> positions = new ArrayList<>();
     private File[] listFile;
     private Button addmore,proceed;
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private String userChoosenTask;
     private SharedPreferences sskey;
     private String profileuid;
     private Firebase firebase;
-    Uri uri;
-    File f = null;
-    private StorageReference storageReference;
-    private String prescriptionName;
-    private ArrayList<String> stringArrayList = new ArrayList<>();
+    private ArrayList<String> selectedStrings;
+    ProgressDialog progressDialog;
     private ArrayList<PharmacyModelOne> gridviewModels = new ArrayList<>();
-    private ArrayList<PharmacyModel> pharmacyModels = new ArrayList<>();
+    private ArrayList<PharmacyModelOne> finalorders = new ArrayList<>();
     File file;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +61,16 @@ public class ProceedPharmacyActivity extends AppCompatActivity implements View.O
         addmore.setOnClickListener(this);
         proceed = (Button)findViewById(R.id.proceed);
         proceed.setOnClickListener(this);
+        selectedStrings = new ArrayList<>();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Firebase.setAndroidContext(getApplicationContext());
         sskey = PreferenceManager.getDefaultSharedPreferences(this);
         profileuid = sskey.getString("uid","0");
         Firebase.setAndroidContext(ProceedPharmacyActivity.this);
+        progressDialog = new ProgressDialog(ProceedPharmacyActivity.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
         firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Pharmacy"+"/"+profileuid);
         firebase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,10 +84,35 @@ public class ProceedPharmacyActivity extends AppCompatActivity implements View.O
                         modelOne.setPresImageUrl(ds.getValue(PharmacyModelOne.class).getPresImageUrl());
                         gridviewModels.add(modelOne);
                     }
+                    progressDialog.dismiss();
                     Collections.reverse(gridviewModels);
                     adapter = new GridViewAdapter(ProceedPharmacyActivity.this, gridviewModels);
                     gridView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                            int selectedIndex = adapter.selectedPositions.indexOf(position);
+                            if (selectedIndex > -1) {
+                                adapter.selectedPositions.remove(selectedIndex);
+                                ((GridItemView) v).display(false);
+                                selectedStrings.remove(String.valueOf(parent.getItemAtPosition(position)));
+                                    finalorders.remove(selectedIndex);
+                            } else {
+                                PharmacyModelOne pharmacyModelOne = new PharmacyModelOne();
+                                pharmacyModelOne.setUid(((TextView)v.findViewById(R.id.pharmacysingleuid)).getText().toString());
+                                pharmacyModelOne.setPresName(((TextView)v.findViewById(R.id.pharmacysingletextview)).getText().toString());
+                                pharmacyModelOne.setPresDesc(((TextView)v.findViewById(R.id.pharmacysinglepresdata)).getText().toString());
+                                pharmacyModelOne.setPresImageUrl(((TextView)v.findViewById(R.id.pharmacysingleimageurl)).getText().toString());
+                                finalorders.add(pharmacyModelOne);
+                                adapter.selectedPositions.add(position);
+                                ((GridItemView) v).display(true);
+                                selectedStrings.add(String.valueOf(parent.getItemAtPosition(position)));
+                            }
+                        }
+                    });
                 }
             }
 
@@ -107,38 +121,9 @@ public class ProceedPharmacyActivity extends AppCompatActivity implements View.O
 
             }
         });
-//        if (!Environment.getExternalStorageState().equals(
-//                Environment.MEDIA_MOUNTED)) {
-//            Toast.makeText(this, "Error! No SDCARD Found!", Toast.LENGTH_LONG)
-//                    .show();
-//        } else {
-//            // Locate the image folder in your SD Card
-//            file = new File(Environment.getExternalStorageDirectory(),"KiranaKart");
-//            // Create a new folder if no folder named SDImageTutorial exist
-//            file.mkdirs();
-//        }
-//    try{
-//        if (file.isDirectory()) {
-//            listFile = file.listFiles();
-//            // Create a String array for FilePathStrings
-//            FilePathStrings = new String[listFile.length];
-//            // Create a String array for FileNameStrings
-//            FileNameStrings = new String[listFile.length];
-//
-//            for (int i = 0; i < listFile.length; i++) {
-//                // Get the path of the image file
-//                GridviewModel gridviewModel = new GridviewModel();
-//                gridviewModel.setImage(listFile[i].getAbsolutePath());
-//                gridviewModel.setImagename(listFile[i].getName());
-//                gridviewModels.add(gridviewModel);
-//            }
-//        }
-//
-//    }catch (NullPointerException e){
-//
-//    }
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,41 +156,30 @@ public class ProceedPharmacyActivity extends AppCompatActivity implements View.O
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!Environment.getExternalStorageState().equals(
-                                Environment.MEDIA_MOUNTED)) {
-                            Toast.makeText(ProceedPharmacyActivity.this, "Error! No SDCARD Found!", Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-                            // Locate the image folder in your SD Card
-                            file = new File(Environment.getExternalStorageDirectory(),"KiranaKart");
-                            // Create a new folder if no folder named SDImageTutorial exist
-                            file.mkdirs();
-                        }
-
-                        if (file.isDirectory()) {
-                            listFile = file.listFiles();
-                            FileNameStrings = new String[listFile.length];
-
-
-
-                            for (int i = 0; i < listFile.length; i++) {
-                                // Get the path of the image file
-                                Bitmap bmp = BitmapFactory.decodeFile(listFile[i].getAbsolutePath());
-
-                            }
-                        }
                         Calendar calendar = Calendar.getInstance();
                         SimpleDateFormat mdformat = new SimpleDateFormat("dd / MM / yyyy ");
                         String strDate = mdformat.format(calendar.getTime());
+                        if(finalorders.size()==0){
+                            Toasty.error(ProceedPharmacyActivity.this,"Your Order is not proceed select minimum One Prescription",Toast.LENGTH_SHORT).show();
+                        }else {
+                            for(int i = 0;i<finalorders.size();i++){
+                                PharmacyModelOne pharmacyModelOne = new PharmacyModelOne();
+                                pharmacyModelOne.setUid(finalorders.get(i).getUid());
+                                pharmacyModelOne.setPresName(finalorders.get(i).getPresName());
+                                pharmacyModelOne.setPresDesc(finalorders.get(i).getPresDesc());
+                                pharmacyModelOne.setPresImageUrl(finalorders.get(i).getPresImageUrl());
+                                pharmacyModelOne.setDate(strDate);
+                                pharmacyModelOne.setStatus("Initiated");
+                                pharmacyModelOne.setPid(profileuid);
+                                firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Pharmacy"+"/"+"Admin"+"/"+editText.getText().toString());
+                                firebase.push().setValue(pharmacyModelOne);
 
-                        PharmacyModel pharmacyModel = new PharmacyModel();
-                        pharmacyModel.setOrdername(editText.getText().toString());
-                        pharmacyModel.setOrderpid(profileuid);
-                        pharmacyModel.setImageUrl(CenterRepository.getCenterRepository().getList());
-                        pharmacyModel.setDate(strDate);
-                        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Pharmacy"+"/");
-                        firebase.push().setValue(pharmacyModel);
-                        Toast.makeText(ProceedPharmacyActivity.this,"Your Order Has Been Placed",Toast.LENGTH_SHORT).show();
+                            }
+                            finalorders.clear();
+                            selectedStrings.clear();
+                            adapter.selectedPositions.clear();
+                            Toasty.success(ProceedPharmacyActivity.this,"Your Order Has Been Placed",Toast.LENGTH_SHORT).show();
+                        }
                         alertDialog.dismiss();
                     }
                 });

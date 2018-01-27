@@ -7,13 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -37,6 +36,7 @@ public class Categoriesfragment extends Fragment {
     AppCompatActivity activity;
     public Handler handler = new Handler();
     public AHBottomNavigation bottomNavigation;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     // TODO: Rename and change types and number of parameters
     public static Categoriesfragment newInstance() {
@@ -64,7 +64,12 @@ public class Categoriesfragment extends Fragment {
          * The setupWithViewPager dose't works without the runnable .
          * Maybe a Support Library Bug .
          */
-
+        collapsingToolbarLayout = (CollapsingToolbarLayout) x.findViewById(R.id.homecollapsing_toolbar);
+        if(collapsingToolbarLayout != null){
+            collapsingToolbarLayout.setTitle("Grocery");
+            //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
+            //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
+        }
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -163,13 +168,13 @@ public class Categoriesfragment extends Fragment {
           switch (position){
               case 0 : return new FruitsAndVegetablesFragment();
               case 1 : return new FoodgrainsAndMasalaFragment();
-              case 2 : return new BakeryAndCakesDairy();
+              case 2 : return new RiceBagsFragment();
               case 3 : return new Beverages();
               case 4 : return new BrandedFoods();
               case 5 : return new BeautyAndHygenieFragment();
               case 6 : return new HouseholdFragment();
               case 7 : return new GourmentworldfoodFragment();
-              case 8 : return new EggMeatFishFragment();
+              case 8 : return new NurseryFragment();
               case 9 : return new BabyCareFragment();
           }
         return null;

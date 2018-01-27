@@ -28,7 +28,7 @@ import model.ProductCommonClass;
 /**
  * Created by Ratan on 7/29/2015.
  */
-public class FoodgrainsAndMasalaFragment extends Fragment {
+public class RiceBagsFragment extends Fragment {
     private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
     private GridAdapter gridAdapter;
     public static SharedPreferences sskey;
@@ -36,11 +36,11 @@ public class FoodgrainsAndMasalaFragment extends Fragment {
     String SSkey;
     private Firebase firebase;
     private ProgressDialog mProgressDialog;
-    public FoodgrainsAndMasalaFragment() {
+    public RiceBagsFragment() {
 
     }
-    public static FoodgrainsAndMasalaFragment newInstance() {
-        FoodgrainsAndMasalaFragment fragment = new FoodgrainsAndMasalaFragment();
+    public static RiceBagsFragment newInstance() {
+        RiceBagsFragment fragment = new RiceBagsFragment();
         return fragment;
     }
     @Override
@@ -55,7 +55,7 @@ public class FoodgrainsAndMasalaFragment extends Fragment {
         timerDelayRemoveDialog(15*1000,mProgressDialog);
         mProgressDialog.show();
         Firebase.setAndroidContext(getContext());
-        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"FoodgrainsOilMasala");
+        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"RiceBags");
         refreshdata();
         gridAdapter = new GridAdapter(getActivity(),arrayList);
         gridview.setAdapter(gridAdapter);
@@ -63,7 +63,7 @@ public class FoodgrainsAndMasalaFragment extends Fragment {
         return view;
     }
     public  void refreshdata() {
-        firebase.child("FoodgrainsOilMasala").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
+        firebase.child("RiceBags").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getupdates(dataSnapshot);

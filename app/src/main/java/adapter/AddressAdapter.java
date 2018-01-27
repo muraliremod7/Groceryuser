@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 
 import com.firebase.client.Firebase;
 import com.indianservers.onlinegrocery.R;
+import com.indianservers.onlinegrocery.fragment.DeliveryAddressFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +58,11 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                 R.layout.deliveryaddresssingle, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
+    }
+    public void updateResults(List<AddressCommonClass> results) {
+        this.allCommonClasses = results;
+        //Triggers the list update
+        notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
@@ -95,16 +102,21 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                 final EditText city = (EditText)dialogView.findViewById(R.id.addresscityedital);
                 final EditText pincode = (EditText)dialogView.findViewById(R.id.addresspincodeedital);
                 final EditText mobile = (EditText)dialogView.findViewById(R.id.addressmobileedital);
-                nickname.setText(allCommonClasses.get(position).getAddnickname());
-                personname.setText(allCommonClasses.get(position).getAddpersoname());
-                hoseno.setText(allCommonClasses.get(position).getAddhouseno());
-                streetname.setText(allCommonClasses.get(position).getAddstreetname());
-                areaname.setText(allCommonClasses.get(position).getAddarea());
-                apartmentname.setText(allCommonClasses.get(position).getAddapartmentno());
-                landmark.setText(allCommonClasses.get(position).getAddlandmark());
-                city.setText(allCommonClasses.get(position).getAddcity());
-                pincode.setText(allCommonClasses.get(position).getAddpincode());
-                mobile.setText(allCommonClasses.get(position).getAddmobile());
+                try{
+                    nickname.setText(allCommonClasses.get(position).getAddnickname());
+                    personname.setText(allCommonClasses.get(position).getAddpersoname());
+                    hoseno.setText(allCommonClasses.get(position).getAddhouseno());
+                    streetname.setText(allCommonClasses.get(position).getAddstreetname());
+                    areaname.setText(allCommonClasses.get(position).getAddarea());
+                    apartmentname.setText(allCommonClasses.get(position).getAddapartmentno());
+                    landmark.setText(allCommonClasses.get(position).getAddlandmark());
+                    city.setText(allCommonClasses.get(position).getAddcity());
+                    pincode.setText(allCommonClasses.get(position).getAddpincode());
+                    mobile.setText(allCommonClasses.get(position).getAddmobile());
+                }catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
 
                 Button update = (Button)dialogView.findViewById(R.id.saveAddressal);
                 update.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +154,24 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                 String SSkey = sskey.getString("uid","0");
                 firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Address"+"/"+SSkey+"/"+SSkey);
                 firebase.child(allCommonClasses.get(position).getAddpid()).removeValue();
-                onItemDismiss(position);
+                try{
+                    remove(position);
+                }catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
             }
         });
+    }
+    public void remove(int position) {
+        if (position < 0 || position >= allCommonClasses.size()) {
+            return;
+        }
+        allCommonClasses.remove(position);
+        notifyItemRemoved(position);
+        this.notifyItemRemoved(position);
+        this.notifyItemRangeChanged(position, allCommonClasses.size());
+        notifyDataSetChanged();
     }
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
@@ -164,6 +191,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     public void onItemDismiss(int position) {
         allCommonClasses.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {

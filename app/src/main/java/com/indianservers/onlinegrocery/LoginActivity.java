@@ -76,9 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByBackKey();
-
             //moveTaskToBack(false);
-
             return true;
         }
         return super.onKeyDown(keyCode, event);

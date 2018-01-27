@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.GridviewModel;
 import model.PharmacyModelOne;
@@ -38,6 +39,8 @@ public class GridViewAdapter extends BaseAdapter {
     Firebase firebase;
     private SharedPreferences sskey;
     public String profileid;
+    private String[] strings;
+    public List selectedPositions;
     private static LayoutInflater inflater = null;
     private ArrayList<PharmacyModelOne> gridviewModels;
     public GridViewAdapter(Activity a, ArrayList<PharmacyModelOne> gridviewModels) {
@@ -47,9 +50,9 @@ public class GridViewAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         sskey = PreferenceManager.getDefaultSharedPreferences(activity);
         profileid = sskey.getString("uid","0");
+        selectedPositions = new ArrayList<>();
 
     }
-
     public int getCount() {
         return gridviewModels.size();
 
@@ -64,17 +67,16 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View vi = convertView;
-        if (convertView == null)
-            vi = inflater.inflate(R.layout.single_grid, null);
+        GridItemView customView = (convertView == null) ? new GridItemView(activity) : (GridItemView) convertView;
+        customView.display(gridviewModels.get(position).getPresName(), selectedPositions.contains(position));
         // Locate the TextView in gridview_item.xml
-        TextView text = (TextView) vi.findViewById(R.id.pharmacysingletextview);
-        TextView imageurl = (TextView) vi.findViewById(R.id.pharmacysingleimageurl);
-        TextView uid = (TextView) vi.findViewById(R.id.pharmacysingleuid);
-        TextView presdata = (TextView)vi.findViewById(R.id.pharmacysinglepresdata);
+        TextView text = (TextView) customView.findViewById(R.id.pharmacysingletextview);
+        TextView imageurl = (TextView) customView.findViewById(R.id.pharmacysingleimageurl);
+        TextView uid = (TextView) customView.findViewById(R.id.pharmacysingleuid);
+        TextView presdata = (TextView)customView.findViewById(R.id.pharmacysinglepresdata);
         // Locate the ImageView in gridview_item.xml
-        ImageView image = (ImageView) vi.findViewById(R.id.pharmacysingleimage);
-        ImageView delete = (ImageView)vi.findViewById(R.id.deletepharmacy);
+        ImageView image = (ImageView) customView.findViewById(R.id.pharmacysingleimage);
+        ImageView delete = (ImageView)customView.findViewById(R.id.deletepharmacy);
         final PharmacyModelOne gridviewModel = gridviewModels.get(position);
         // Set file name to the TextView followed by the position
         text.setText(gridviewModel.getPresName());
@@ -88,6 +90,7 @@ public class GridViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                    Firebase.setAndroidContext(activity);
                 firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Pharmacy"+"/"+profileid);
+                firebase.child(gridviewModel.getUid()).removeValue();
                         gridviewModels.remove(position);
                         notifyDataSetChanged();
                         Toast.makeText(activity,"Prescription Deleted",Toast.LENGTH_LONG).show();
@@ -95,6 +98,6 @@ public class GridViewAdapter extends BaseAdapter {
             }
         });
         // Set the decoded bitmap into ImageView
-        return vi;
+        return customView;
     }
 }

@@ -117,8 +117,8 @@ public class MyAccount extends Fragment implements View.OnClickListener{
         capturepic.setOnClickListener(this);
         try{
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String previouslyEncodedImage = sharedPrefs.getString("imagePreferance", "");
-            if(previouslyEncodedImage==""){
+            String previouslyEncodedImage = sharedPrefs.getString("imagePreferance", "0");
+            if(previouslyEncodedImage=="0"){
             }else{
                 profilePic.setImageBitmap(decodeBase64(previouslyEncodedImage));
             }
@@ -337,7 +337,10 @@ public class MyAccount extends Fragment implements View.OnClickListener{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("imagePreferance", encodeTobase64(thumbnail));
+        editor.commit();
         profilePic.setImageBitmap(thumbnail);
     }
     @SuppressWarnings("deprecation")

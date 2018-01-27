@@ -1,13 +1,16 @@
 package com.indianservers.onlinegrocery;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,6 +84,10 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
         ppid = intent.getStringExtra("ppid");
         Pimage = intent.getStringExtra("imgurl");
         singleQunatity.setText(intent.getStringExtra("quantity"));
+        productName.setText(Pname);
+        productPrice.setText(PPrice);
+        prodctDescription.setText(Pdesc);
+        singleQunatity.setText(Quantity);
         Glide.with(this)
                 .load(intent.getStringExtra("imgurl"))
                 .into(ProductImage);
@@ -229,5 +236,20 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
         }
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitByBackKey();
+
+            //moveTaskToBack(false);
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    protected void exitByBackKey() {
+        this.finish();
+
     }
 }

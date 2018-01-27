@@ -76,7 +76,7 @@ public class MyOrdersFragment extends Fragment implements View.OnClickListener{
         progressDialog.show();
         Firebase.setAndroidContext(getContext());
         firebase  = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"PlacedOrders"+"/"+profileuid);
-        firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+        firebase.child(profileuid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -140,6 +140,8 @@ public class MyOrdersFragment extends Fragment implements View.OnClickListener{
     private void getupdates(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             PlaceOrderCommonClass aClass = new PlaceOrderCommonClass();
+            aClass.setKid(ds.getKey());
+            aClass.setDeliveryaddress(ds.getValue(PlaceOrderCommonClass.class).getDeliveryaddress());
             aClass.setUid(ds.getValue(PlaceOrderCommonClass.class).getUid());
             aClass.setOrderid(ds.getValue(PlaceOrderCommonClass.class).getOrderid());
             aClass.setOrderdate(ds.getValue(PlaceOrderCommonClass.class).getOrderdate());

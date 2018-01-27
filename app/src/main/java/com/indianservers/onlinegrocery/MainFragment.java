@@ -180,7 +180,6 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
             default:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
     public static void setBadgeCount(Context context, LayerDrawable icon, String count) {
@@ -202,6 +201,9 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+    public void onBackPressed() {
 
     }
 }

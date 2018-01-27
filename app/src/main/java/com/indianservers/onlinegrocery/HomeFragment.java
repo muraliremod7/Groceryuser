@@ -1,6 +1,5 @@
 package com.indianservers.onlinegrocery;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,8 +10,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,9 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -56,10 +50,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     Toolbar toolbar;
     private SharedPreferences sskey;
     private SharedPreferences.Editor editor;
-    private Toolbar layout;
-    private ImageView imageView;
+    private ImageView imageView, singlecheckout;
     HashMap<String, String> HashMapForURL ;
-
     HashMap<String, Integer> HashMapForLocalRes ;
     private OnFragmentInteractionListener mListener;
 
@@ -94,11 +86,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         mDemoSlider = (SliderLayout)view.findViewById(R.id.slider);
         //Call this method if you want to add images from URL .
         AddImagesUrlOnline();
-
-        layout = (Toolbar) view.findViewById(R.id.too);
-        imageView = (ImageView)view.findViewById(R.id.im);
-        imageView.setOnClickListener(this);
-
 
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -197,11 +184,10 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         HashMapForURL = new HashMap<String, String>();
 
-        HashMapForURL.put("1", "http://www.softcron.com/images/gro.png");
-        HashMapForURL.put("2", "https://ak6.picdn.net/shutterstock/videos/16051936/thumb/1.jpg");
-        HashMapForURL.put("3", "http://www.voile35.com/wp-content/uploads/2017/03/ONLINE-Pharmacy.png");
-        HashMapForURL.put("4", "http://dealsrightnow.net:5555/offers/-728.png");
-        HashMapForURL.put("5", "http://www.softcron.com/images/gro.png");
+        HashMapForURL.put("Beverges", "http://www.softcron.com/images/gro.png");
+        HashMapForURL.put("Fruits&Vegetables", "https://ak6.picdn.net/shutterstock/videos/16051936/thumb/1.jpg");
+        HashMapForURL.put("Pharmacy", "http://www.voile35.com/wp-content/uploads/2017/03/ONLINE-Pharmacy.png");
+        HashMapForURL.put("Amazing Offers", "http://dealsrightnow.net:5555/offers/-728.png");
     }
     @Override
     public void onAttach(Context context) {
@@ -228,19 +214,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.categorysframelayout, FruitsAndVegetablesFragment.newInstance());
+                transaction.replace(R.id.containerView, new ItemsFragment());
                 transaction.commit();
-                Toolbar toolbarfv = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                AHBottomNavigation navigation = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-                try {
-                    navigation.setVisibility(View.GONE);
-                    toolbarfv.setVisibility(View.GONE);
-                    layout.setVisibility(View.VISIBLE);
-                }
-                catch (NullPointerException e){
-
-                }
-
                 break;
             case R.id.foodgrains:
                 editor = sskey.edit();
@@ -248,35 +223,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fg = getFragmentManager();
                 FragmentTransaction fgt = fg.beginTransaction();
-                fgt.add(R.id.categorysframelayout, FoodgrainsAndMasalaFragment.newInstance());
+                fgt.replace(R.id.containerView, new ItemsFragment());
                 fgt.commit();
-                Toolbar toolbarfg = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                AHBottomNavigation navigation1 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-                try{
-                    navigation1.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                toolbarfg.setVisibility(View.GONE);
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.bakery:
                 editor = sskey.edit();
-                editor.putString("categoryType","BakeryCakesDairy");
+                editor.putString("categoryType","RiceBags");
                 editor.commit();
                 FragmentManager fgbk = getFragmentManager();
                 FragmentTransaction fgtbk = fgbk.beginTransaction();
-                fgtbk.add(R.id.categorysframelayout, BakeryAndCakesDairy.newInstance());
+                fgtbk.replace(R.id.containerView, new ItemsFragment());
                 fgtbk.commit();
-                Toolbar toolbarbk = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarbk.setVisibility(View.GONE);
-                AHBottomNavigation navigation2 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-                try{
-                    navigation2.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.beverges:
                 editor = sskey.edit();
@@ -284,18 +241,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fgbe = getFragmentManager();
                 FragmentTransaction fgtbe = fgbe.beginTransaction();
-                fgtbe.add(R.id.categorysframelayout, Beverages.newInstance());
+                fgtbe.add(R.id.containerView, new ItemsFragment());
                 fgtbe.commit();
-                Toolbar toolbarbe = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarbe.setVisibility(View.GONE);
-                AHBottomNavigation navigation3 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation3.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.brandedfood:
                 editor = sskey.edit();
@@ -303,18 +250,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fgbf = getFragmentManager();
                 FragmentTransaction fgtbf = fgbf.beginTransaction();
-                fgtbf.add(R.id.categorysframelayout, BrandedFoods.newInstance());
+                fgtbf.add(R.id.containerView, new ItemsFragment());
                 fgtbf.commit();
-                Toolbar toolbarbf = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarbf.setVisibility(View.GONE);
-                AHBottomNavigation navigation4 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation4.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.beauty:
                 editor = sskey.edit();
@@ -322,17 +259,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fgbu = getFragmentManager();
                 FragmentTransaction fgtbu = fgbu.beginTransaction();
-                fgtbu.add(R.id.categorysframelayout, BeautyAndHygenieFragment.newInstance());
+                fgtbu.add(R.id.containerView, new ItemsFragment());
                 fgtbu.commit();
-                Toolbar toolbarbu = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarbu.setVisibility(View.GONE);
-                AHBottomNavigation navigation5 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-                try{
-                    navigation5.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.household:
                 editor = sskey.edit();
@@ -340,18 +268,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fgh = getFragmentManager();
                 FragmentTransaction fgth = fgh.beginTransaction();
-                fgth.replace(R.id.categorysframelayout, HouseholdFragment.newInstance());
+                fgth.replace(R.id.containerView, new ItemsFragment());
                 fgth.commit();
-                Toolbar toolbarh = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarh.setVisibility(View.GONE);
-                AHBottomNavigation navigation6 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation6.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.gourment:
                 editor = sskey.edit();
@@ -359,101 +277,29 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 editor.commit();
                 FragmentManager fgg = getFragmentManager();
                 FragmentTransaction fgtg = fgg.beginTransaction();
-                fgtg.add(R.id.categorysframelayout, GourmentworldfoodFragment.newInstance());
+                fgtg.add(R.id.containerView, new ItemsFragment());
                 fgtg.commit();
-                Toolbar toolbarg = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarg.setVisibility(View.GONE);
-                AHBottomNavigation navigation7 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation7.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.eggs:
                 editor = sskey.edit();
-                editor.putString("categoryType","EggsMeatFish");
+                editor.putString("categoryType","Nursery");
                 editor.commit();
                 FragmentManager fgeg = getFragmentManager();
                 FragmentTransaction fgteg = fgeg.beginTransaction();
-                fgteg.add(R.id.categorysframelayout, EggMeatFishFragment.newInstance());
+                fgteg.add(R.id.containerView, new ItemsFragment());
                 fgteg.commit();
-                Toolbar toolbareg = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbareg.setVisibility(View.GONE);
-                AHBottomNavigation navigation8 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation8.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.VISIBLE);
-                break;
-            case R.id.im:
-                editor = sskey.edit();
-                editor.remove("categoryType");
-                editor.commit();
-                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.categorysframelayout)).commit();
-                Toolbar toolbarr = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarr.setVisibility(View.VISIBLE);
-                AHBottomNavigation navigation9 = (AHBottomNavigation)getActivity().findViewById(R.id.bottom_navigation);
-
-                try{
-                    navigation9.setVisibility(View.VISIBLE);
-                }catch (NullPointerException e){
-
-                }
-                layout.setVisibility(View.GONE);
                 break;
             case R.id.pharmacy:
                 Intent intent = new Intent(getActivity(),PharmacyActivity.class);
                 startActivity(intent);
                 break;
+
         }
     }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
 
-    }
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                editor = sskey.edit();
-                editor.remove("categoryType");
-                editor.commit();
-                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.categorysframelayout)).commit();
-                Toolbar toolbarr = (Toolbar)getActivity().findViewById(R.id.toolbar);
-                toolbarr.setVisibility(View.VISIBLE);
-                layout.setVisibility(View.GONE);
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.checkoutimage:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

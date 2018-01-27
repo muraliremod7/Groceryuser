@@ -7,11 +7,23 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
     <LinearLayout
+        android:orientation="vertical"
         android:background="#B7B7B7"
         android:visibility="visible"
         android:id="@+id/deliveryaddresslayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#ffff"
+            android:text="Add New Address"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:background="@color/buttoncolor"
+            android:id="@+id/addNewaddress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
         <android.support.v7.widget.RecyclerView
             android:layout_margin="10dp"
             android:id="@+id/deliveryRecyclerview"
@@ -104,6 +116,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/saveAddress"
                 android:text="Save Address"
+                android:background="@color/buttoncolor"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancelAddress"
+                android:text="Cancel"
                 android:background="@color/buttoncolor"
                 android:textColor="@color/white"
                 android:textStyle="bold"

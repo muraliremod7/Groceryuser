@@ -1,22 +1,27 @@
 package com.indianservers.onlinegrocery;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,48 +32,67 @@ import java.util.ArrayList;
 import adapter.GridAdapter;
 import model.CenterRepository;
 import model.ProductCommonClass;
-import model.ProfileCommonClass;
-import model.entities.Product;
 
-/**
- * Created by Ratan on 7/29/2015.
- */
-public class BakeryAndCakesDairy extends Fragment {
+
+public class ItemsFragment extends Fragment implements View.OnClickListener{
     private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
-    private GridAdapter gridAdapter;
-    public static SharedPreferences sskey;
-    private RecyclerView gridview;
-    String SSkey;
-    private Firebase firebase;
+    private SharedPreferences sskey;
+    private String type;
+    private RecyclerView allitemsList;
     private ProgressDialog mProgressDialog;
-    public BakeryAndCakesDairy() {
+    private Firebase firebase;
+    private GridAdapter gridAdapter;
+    private ImageView imageView, singlecheckout;
 
+    public ItemsFragment() {
+        // Required empty public constructor
     }
-    public static BakeryAndCakesDairy newInstance() {
-        BakeryAndCakesDairy fragment = new BakeryAndCakesDairy();
+
+    // TODO: Rename and change types and number of parameters
+    public static ItemsFragment newInstance(String param1, String param2) {
+        ItemsFragment fragment = new ItemsFragment();
         return fragment;
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.greenleaf_layout,container,false);
-        gridview = (RecyclerView) view.findViewById(R.id.greenleafgrid);
-        gridview.setAlpha(0.9f);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_items, container, false);
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SSkey = sskey.getString("sskey","0");
+        type = sskey.getString("categoryType","0");
+        Toolbar toolbarbe = (Toolbar)getActivity().findViewById(R.id.maintoolbar);
+        toolbarbe.setVisibility(View.GONE);
+        RelativeLayout toolbar = (RelativeLayout) view.findViewById(R.id.too);
+        allitemsList = (RecyclerView)view.findViewById(R.id.allitemsGridview);
+        allitemsList.setAlpha(0.9f);
+        imageView = (ImageView)view.findViewById(R.id.imageback);
+        imageView.setOnClickListener(this);
+        singlecheckout = (ImageView)view.findViewById(R.id.singlecheckoutimage);
+        singlecheckout.setOnClickListener(this);
+
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setMessage("Please Wait...");
-        timerDelayRemoveDialog(15*1000,mProgressDialog);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.show();
+
         Firebase.setAndroidContext(getContext());
-        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"BakeryCakesDairy");
+
+        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+type);
         refreshdata();
         gridAdapter = new GridAdapter(getActivity(),arrayList);
-        gridview.setAdapter(gridAdapter);
+        allitemsList.setAdapter(gridAdapter);
         gridAdapter.notifyDataSetChanged();
         return view;
     }
     public  void refreshdata() {
-        firebase.child("BakeryCakesDairy").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
+        firebase.child(type).orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getupdates(dataSnapshot);
@@ -107,9 +131,9 @@ public class BakeryAndCakesDairy extends Fragment {
             gridAdapter = new GridAdapter(getActivity(), arrayList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                     getActivity().getBaseContext());
-            gridview.setLayoutManager(linearLayoutManager);
-            gridview.setHasFixedSize(true);
-            gridview.setAdapter(gridAdapter);
+            allitemsList.setLayoutManager(linearLayoutManager);
+            allitemsList.setHasFixedSize(true);
+            allitemsList.setAdapter(gridAdapter);
             gridAdapter.notifyDataSetChanged();
 
             gridAdapter.SetOnItemClickListener(new GridAdapter.OnItemClickListener() {
@@ -146,18 +170,49 @@ public class BakeryAndCakesDairy extends Fragment {
         {
             gridAdapter = new GridAdapter(getActivity(),arrayList);
             try{
-                gridview.setAdapter(gridAdapter);
+                allitemsList.setAdapter(gridAdapter);
                 mProgressDialog.dismiss();
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
         }
     }
-    public void timerDelayRemoveDialog(long time, final Dialog d){
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                d.dismiss();
-            }
-        }, time);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+
+        } else {
+
+        }
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.singlecheckoutimage:
+                Intent checkoutintent = new Intent(getActivity(),CheckOutActivity.class);
+                startActivity(checkoutintent);
+                break;
+            case R.id.imageback:
+                FragmentManager fgbe = getFragmentManager();
+                FragmentTransaction fgtbe = fgbe.beginTransaction();
+                fgtbe.add(R.id.containerView, new HomeFragment());
+                fgtbe.commit();
+                Toolbar toolbarr = (Toolbar)getActivity().findViewById(R.id.maintoolbar);
+                toolbarr.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
 }

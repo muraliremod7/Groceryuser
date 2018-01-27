@@ -134,7 +134,12 @@ public class CheckoutListviewAdapter extends RecyclerView.Adapter<CheckoutListvi
         }
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(view, getPosition());
+            try{
+                clickListener.onItemClick(view, getPosition());
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
         }
     }
 

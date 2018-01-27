@@ -44,8 +44,8 @@ public class Beverages extends Fragment {
     public Beverages() {
 
     }
-    public static FruitsAndVegetablesFragment newInstance() {
-        FruitsAndVegetablesFragment fragment = new FruitsAndVegetablesFragment();
+    public static Beverages newInstance() {
+        Beverages fragment = new Beverages();
         return fragment;
     }
     @Override
