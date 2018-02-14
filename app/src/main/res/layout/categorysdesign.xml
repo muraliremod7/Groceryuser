@@ -17,7 +17,7 @@
             android:gravity="center"
             android:background="@color/buttoncolor"
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="50dp">
             <TextView
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -70,7 +70,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/foodgrainsandoil"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -95,7 +95,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/ricebags"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -126,7 +126,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/beverges"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -151,7 +151,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/brandedfoods"/>
 
                 <TextView
                     android:id="@+id/textView2"
@@ -178,7 +178,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/beauty"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -208,7 +208,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/household"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -233,13 +233,13 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/babycare"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gourment,World Food"/>
+                    android:text="BabyCare"/>
             </LinearLayout>
             <View
                 android:background="#B7B7B7"
@@ -258,7 +258,7 @@
                     android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fruitsandvegetables"/>
+                    android:src="@drawable/bonsai"/>
                 <TextView
                     android:gravity="center"
                     android:textSize="12dp"
@@ -266,12 +266,92 @@
                     android:layout_height="wrap_content"
                     android:text="Nursery"/>
             </LinearLayout>
+        </LinearLayout>
+        <View
+            android:background="#B7B7B7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:clickable="true"
+                android:id="@+id/deosandperfumes"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/deos"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deos And Perfumes"/>
+            </LinearLayout>
+            <View
+                android:background="#B7B7B7"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:clickable="true"
+                android:id="@+id/patanjali"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/patanjali"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Patanjali"/>
+            </LinearLayout>
+            <View
+                android:background="#B7B7B7"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:clickable="true"
+                android:id="@+id/vitaminc"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vitamin"/>
+                <TextView
+                    android:gravity="center"
+                    android:textSize="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Health Products"/>
+            </LinearLayout>
 
         </LinearLayout>
         <LinearLayout
             android:gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@color/buttoncolor"
+            android:background="@color/pharmacylayoutcolor"
             android:layout_width="match_parent"
             android:layout_height="50dp">
             <TextView
@@ -295,7 +375,7 @@
         <LinearLayout
             android:gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@color/buttoncolor"
+            android:background="@color/serviceslayoutcolor"
             android:layout_width="match_parent"
             android:layout_height="50dp">
             <TextView
@@ -312,7 +392,8 @@
             android:id="@+id/services"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/pharmacy"/>
+            android:background="#F3E5F5"
+            android:src="@drawable/servicesimage"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="100dp"/>

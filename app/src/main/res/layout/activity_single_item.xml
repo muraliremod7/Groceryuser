@@ -58,13 +58,14 @@
         </LinearLayout>
 
 <LinearLayout
-    android:background="@color/buttoncolor"
+    android:background="#50ff5353"
     android:layout_marginRight="20dp"
     android:layout_gravity="right"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content">
     <TextView
+        android:layout_weight="1"
         android:clickable="true"
         android:id="@+id/singleDecrese"
         android:layout_gravity="center_vertical"
@@ -74,6 +75,7 @@
         android:background="@drawable/minus"
         android:backgroundTint="@color/white"/>
     <TextView
+        android:layout_weight="1"
         android:id="@+id/singleQuantity"
         android:gravity="center"
         android:layout_width="wrap_content"
@@ -83,6 +85,7 @@
         android:textSize="25sp"
         android:textStyle="bold"/>
     <TextView
+        android:layout_weight="1"
         android:clickable="true"
         android:id="@+id/singleIncrease"
         android:layout_gravity="center_vertical"

@@ -4,12 +4,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +40,8 @@ import com.firebase.client.ValueEventListener;
 import com.indianservers.onlinegrocery.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import adapter.AddressAdapter;
 import model.AddressCommonClass;
@@ -44,7 +55,7 @@ import model.CenterRepository;
  * Use the {@link DeliveryAddressFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveryAddressFragment extends Fragment implements View.OnClickListener{
+public class DeliveryAddressFragment extends Fragment implements View.OnClickListener,LocationListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,6 +72,8 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
     private ArrayList<AddressCommonClass> commonClasses = new ArrayList<>();
     private RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
+    LocationManager locationManager;
+    private String latlag;
 
     public DeliveryAddressFragment() {
         // Required empty public constructor
@@ -87,7 +100,11 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_delivery_address, container, false);
+        if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+
+        }
         nickname = (EditText)view.findViewById(R.id.addressnicknameedit);
         personname = (EditText)view.findViewById(R.id.addresspersonnameedit);
         houseno = (EditText)view.findViewById(R.id.addresshousenoedit);
@@ -95,7 +112,6 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
         area = (EditText)view.findViewById(R.id.addressareaedit);
         apartment = (EditText)view.findViewById(R.id.addressapartmentnameedit);
         landmark = (EditText)view.findViewById(R.id.addresslandmarkedit);
-        city = (EditText)view.findViewById(R.id.addresscityedit);
         pincode = (EditText)view.findViewById(R.id.addresspincodeedit);
         mobile = (EditText)view.findViewById(R.id.addressmobileedit);
         recyclerView = (RecyclerView)view.findViewById(R.id.deliveryRecyclerview);
@@ -139,6 +155,15 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
         });
 
         return view;
+    }
+    void getLocation() {
+        try {
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+        }
+        catch(SecurityException e) {
+            e.printStackTrace();
+        }
     }
     private void profileData() {
         progressDialog = new ProgressDialog(getContext());
@@ -209,9 +234,10 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
 
                             // do something when the button is clicked
                             public void onClick(DialogInterface arg0, int arg1) {
+                                view.setSelected(true);
+                                view.setBackgroundColor(Color.parseColor("#E5F1FB"));
                                 //close();
-                                final AddressCommonClass aClass = new AddressCommonClass();
-
+                 final AddressCommonClass aClass = new AddressCommonClass();
                         String aid = ((TextView)view.findViewById(R.id.aid)).getText().toString();
                         String anName = ((TextView)view.findViewById(R.id.addressnickname)).getText().toString();
                         String apname = ((TextView)view.findViewById(R.id.addressName)).getText().toString();
@@ -283,7 +309,38 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
         } else {
         }
     }
+    @Override
+    public void onLocationChanged(Location location) {
+        latlag = "Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude();
 
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            pincode.setText(addresses.get(0).getAddressLine(1));
+            mobile.setText(addresses.get(0).getPhone());
+//            latlag = addresses.get(0).getAddressLine(0)+", "+
+//                    addresses.get(0).getAddressLine(1)+", "+addresses.get(0).getAddressLine(2);
+        }catch(Exception e)
+        {
+
+        }
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getContext(), "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
     @Override
     public void onDetach() {
         super.onDetach();
@@ -316,6 +373,7 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
                 ft.commit();
                 break;
             case R.id.addNewaddress:
+                getLocation();
                 View forgotLayout = getActivity().findViewById(R.id.addresseditlayout);
                 forgotLayout.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
                 forgotLayout.setVisibility(View.VISIBLE);
@@ -335,12 +393,14 @@ public class DeliveryAddressFragment extends Fragment implements View.OnClickLis
                 aClass.setAddarea(area.getText().toString());
                 aClass.setAddapartmentno(apartment.getText().toString());
                 aClass.setAddlandmark(landmark.getText().toString());
-                aClass.setAddcity(city.getText().toString());
+                aClass.setAddcity("Vijayawada");
+                aClass.setLatlan(latlag);
                 aClass.setAddpincode(pincode.getText().toString());
                 aClass.setAddmobile(mobile.getText().toString());
                 firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Address"+"/"+profileuid+"/"+profileuid);
                 firebase.push().child("").setValue(aClass);
-
+                firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"ConfAddress"+"/"+profileuid+"/"+profileuid);
+                firebase.push().child("").setValue(aClass);
                 View forgotLayoutt = getActivity().findViewById(R.id.addresseditlayout);
                 forgotLayoutt.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
                 forgotLayoutt.setVisibility(View.GONE);

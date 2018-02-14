@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -32,118 +33,48 @@ public class Categoriesfragment extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    public static int int_items = 10;
+    public static int int_items = 12;
     AppCompatActivity activity;
-    public Handler handler = new Handler();
-    public AHBottomNavigation bottomNavigation;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-    private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     // TODO: Rename and change types and number of parameters
     public static Categoriesfragment newInstance() {
         Categoriesfragment fragment = new Categoriesfragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /**
-         *Inflate categories_layout and setup Views.
-         */
+
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            /**
+             *Inflate categories_layout and setup Views.
+             */
             View x =  inflater.inflate(R.layout.categories_layout,container,false);
             tabLayout = (TabLayout) x.findViewById(R.id.tabs);
             viewPager = (ViewPager) x.findViewById(R.id.viewpager);
-        /**
-         *Set an Apater for the View Pager
-         */
-        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-        /**
-         * Now , this is a workaround ,
-         * The setupWithViewPager dose't works without the runnable .
-         * Maybe a Support Library Bug .
-         */
-        collapsingToolbarLayout = (CollapsingToolbarLayout) x.findViewById(R.id.homecollapsing_toolbar);
-        if(collapsingToolbarLayout != null){
-            collapsingToolbarLayout.setTitle("Grocery");
-            //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
-            //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
-        }
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                    tabLayout.setupWithViewPager(viewPager);
-                   }
-        });
 
-        bottomNavigation = (AHBottomNavigation) x.findViewById(R.id.cabottom_navigation);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem("Home", R.drawable.home, R.color.buttoncolor);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem("Categorys", R.drawable.category, R.color.buttoncolor);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem("Checkout", R.drawable.checkout, R.color.buttoncolor);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
 
-// Add items
-        bottomNavigationItems.add(item1);
-        bottomNavigationItems.add(item2);
-        bottomNavigationItems.add(item3);
-        bottomNavigation.addItems(bottomNavigationItems);
-// Set background color
-        bottomNavigation.setAccentColor(Color.parseColor("#FF9BAE19"));
-        bottomNavigation.setInactiveColor(Color.parseColor("#B7B7B7"));
-        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
-        bottomNavigation.setBehaviorTranslationEnabled(false);
-        bottomNavigation.setForceTint(true);
-        bottomNavigation.setTranslucentNavigationEnabled(true);
-        bottomNavigation.setCurrentItem(0);
-        bottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
-        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                Fragment selectedFragment = null;
-                if(position==0){
-                    selectedFragment = HomeFragment.newInstance();
-                }if(position==1){
-                    selectedFragment = Categoriesfragment.newInstance();
-                }
-                if(position==2){
-                    Intent intent = new Intent(getActivity(),CheckOutActivity.class);
-                    startActivity(intent);
-                }
-                try{
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.caframe_layout, selectedFragment);
-                    transaction.commit();
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
+            /**
+             *Set an Apater for the View Pager
+             */
+            viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
+            /**
+             * Now , this is a workaround ,
+             * The setupWithViewPager dose't works without the runnable .
+             * Maybe a Support Library Bug .
+             */
 
-                return true;
-            }
-        });
-        bottomNavigation.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
-            @Override public void onPositionChange(int y) {
-                // Manage the new y position
-            }
-        });
-        try{
-            handler.postDelayed(new Runnable() {
+            tabLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    // Setting custom colors for notification
-                    AHNotification notification = new AHNotification.Builder()
-                            .setText(":)")
-                            .build();
-
+                    tabLayout.setupWithViewPager(viewPager);
                 }
-            }, 3000);
-        }catch (NullPointerException e){
-            e.printStackTrace();
+            });
+
+            return x;
+
         }
-
-
-        return x;
-
-    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -173,9 +104,11 @@ public class Categoriesfragment extends Fragment {
               case 4 : return new BrandedFoods();
               case 5 : return new BeautyAndHygenieFragment();
               case 6 : return new HouseholdFragment();
-              case 7 : return new GourmentworldfoodFragment();
+              case 7 : return new BabyCareFragment();
               case 8 : return new NurseryFragment();
-              case 9 : return new BabyCareFragment();
+              case 9 : return new DeosAndPerfumesFragment();
+              case 10: return new VitaminCFragment();
+              case 11: return new PatanjaliFragment();
           }
         return null;
         }
@@ -198,9 +131,9 @@ public class Categoriesfragment extends Fragment {
                 case 0 :
                     return "Fruits & Vegetables";
                 case 1 :
-                    return "Foodgrains,Oil & Masala";
+                    return "Foodgrains,Oil";
                 case 2:
-                    return "Bakery, Cakes & Dairy";
+                    return "Rice Bags";
                 case 3:
                     return "Beverages";
                 case 4:
@@ -210,11 +143,15 @@ public class Categoriesfragment extends Fragment {
                 case 6:
                     return "Household";
                 case 7:
-                    return "Gourmet & World Food";
-                case 8:
-                    return "Eggs,Meat & Fish";
-                case 9:
                     return "BabyCare";
+                case 8:
+                    return "Nursery";
+                case 9:
+                    return "Deos And Perfumes";
+                case 10:
+                    return "Health Products";
+                case 11:
+                    return "Patanjali";
             }
                 return null;
         }

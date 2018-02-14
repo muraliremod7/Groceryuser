@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,19 +54,20 @@ import model.OrdersCommonClass;
  * Use the {@link PlaceOrderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlaceOrderFragment extends Fragment {
+public class PlaceOrderFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private String title;
-    private int page;
+    public int page;
     private Firebase firebase;
     private RecyclerView orcoreview;
     // TODO: Rename and change types of parameters
 
     private String SSkey;
     private Spinner date,time;
-    private TextView noofitems,deliverydate,deliverytime,deliverycharges,totalpayableamount;
+    private TextView noofitems,deliverydate,deliverytime,deliverycharges,totalpayableamount,orderCost;
     private Button placeorder;
+    private Button addnewAddress, cancelAddress;
     private ArrayList<AddressCommonClass> commonClasses = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
@@ -122,7 +124,10 @@ public class PlaceOrderFragment extends Fragment {
         deliverytime = (TextView)view.findViewById(R.id.orderDeliveryTime);
         totalpayableamount = (TextView)view.findViewById(R.id.orderDeliverypayamount);
         placeorder =(Button)view.findViewById(R.id.placeOrder);
-
+        deliverycharges = (TextView)view.findViewById(R.id.orderDeliveryCharges) ;
+        orderCost = (TextView)view.findViewById(R.id.orderCost);
+        addnewAddress = (Button)view.findViewById(R.id.conaddNewaddress);
+        addnewAddress.setOnClickListener(this);
         SharedPreferences sskey = PreferenceManager.getDefaultSharedPreferences(getContext());
         SSkey = sskey.getString("uid","0");
         Firebase.setAndroidContext(getContext());
@@ -141,48 +146,7 @@ public class PlaceOrderFragment extends Fragment {
                         profileData();
 
                     }else{
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            LayoutInflater inflater1 = getActivity().getLayoutInflater();
-                            final View dialogView = inflater1.inflate(R.layout.update_address, null);
-                            builder.setView(dialogView);
-                            builder.setTitle("Add Your Address");
-                            final AlertDialog alertDialog = builder.create();
-                            final EditText nickname = (EditText)dialogView.findViewById(R.id.addressnicknameedital);
-                            final EditText personname = (EditText)dialogView.findViewById(R.id.addresspersonnameedital);
-                            final EditText hoseno = (EditText)dialogView.findViewById(R.id.addresshousenoedital);
-                            final EditText streetname = (EditText)dialogView.findViewById(R.id.addressstreetedital);
-                            final EditText areaname = (EditText)dialogView.findViewById(R.id.addressareaedital);
-                            final EditText apartmentname = (EditText)dialogView.findViewById(R.id.addressapartmentnameedital);
-                            final EditText landmark = (EditText)dialogView.findViewById(R.id.addresslandmarkedital);
-                            final EditText city = (EditText)dialogView.findViewById(R.id.addresscityedital);
-                            final EditText pincode = (EditText)dialogView.findViewById(R.id.addresspincodeedital);
-                            final EditText mobile = (EditText)dialogView.findViewById(R.id.addressmobileedital);
-
-                            Button update = (Button)dialogView.findViewById(R.id.saveAddressal);
-                            update.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    AddressCommonClass aClass = new AddressCommonClass();
-                                    aClass.setAddnickname(nickname.getText().toString());
-                                    aClass.setAddpersoname(personname.getText().toString());
-                                    aClass.setAddhouseno(hoseno.getText().toString());
-                                    aClass.setAddstreetname(streetname.getText().toString());
-                                    aClass.setAddarea(areaname.getText().toString());
-                                    aClass.setAddapartmentno(apartmentname.getText().toString());
-                                    aClass.setAddlandmark(landmark.getText().toString());
-                                    aClass.setAddcity(city.getText().toString());
-                                    aClass.setAddpincode(pincode.getText().toString());
-                                    aClass.setAddmobile(mobile.getText().toString());
-
-
-                                    firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Address"+"/"+SSkey+"/"+SSkey);
-                                    firebase.push().setValue(aClass);
-                                    alertDialog.dismiss();
-                                    startActivity(getActivity().getIntent());
-                                    getActivity().finish();
-                                }
-                            });
-                            alertDialog.show();
+                          showAlertDailog();
 
                         }
                     }
@@ -236,9 +200,19 @@ public class PlaceOrderFragment extends Fragment {
             LinearLayout ordersummary = (LinearLayout)view.findViewById(R.id.ordersummury);
             ordersummary.setVisibility(View.VISIBLE);
             noofitems.setText(String.valueOf(CenterRepository.getCenterRepository().getListofAddress().size()));
-            totalpayableamount.setText(CheckOutActivity.finalprice.getText().toString());
             deliverytime.setText(PlaceOrderActivity.timee);
             deliverydate.setText(PlaceOrderActivity.datee);
+            orderCost.setText(CheckOutActivity.finalprice.getText().toString());
+            int n = Integer.parseInt(CheckOutActivity.finalprice.getText().toString());
+            int j = 50;
+            if(n<500){
+                deliverycharges.setText("50");
+                int k = n+j;
+                totalpayableamount.setText(String.valueOf(k));
+            }else {
+                deliverycharges.setText("0");
+                totalpayableamount.setText(CheckOutActivity.finalprice.getText().toString());
+            }
             placeorder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -256,7 +230,8 @@ public class PlaceOrderFragment extends Fragment {
                                     aClass.setOrderitems(String.valueOf(noofitems.getText().toString()));
                                     aClass.setOrderdate(String.valueOf(deliverydate.getText().toString()));
                                     aClass.setOrdertime(String.valueOf(deliverytime.getText().toString()));
-                                    aClass.setStatus("Initialized");
+                                    aClass.setStatus("Initiated");
+
                                     aClass.setOrderpayableamount(String.valueOf(totalpayableamount.getText().toString()));
                                     firebase  = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"PlacedOrders"+"/"+SSkey+"/"+SSkey);
                                     firebase.push().setValue(aClass);
@@ -294,6 +269,58 @@ public class PlaceOrderFragment extends Fragment {
         }
         return view;
     }
+
+    private void showAlertDailog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater1 = getActivity().getLayoutInflater();
+        final View dialogView = inflater1.inflate(R.layout.update_address, null);
+        builder.setView(dialogView);
+        builder.setTitle("Add Your Address");
+        final AlertDialog alertDialog = builder.create();
+        final EditText nickname = (EditText)dialogView.findViewById(R.id.addressnicknameedital);
+        final EditText personname = (EditText)dialogView.findViewById(R.id.addresspersonnameedital);
+        final EditText hoseno = (EditText)dialogView.findViewById(R.id.addresshousenoedital);
+        final EditText streetname = (EditText)dialogView.findViewById(R.id.addressstreetedital);
+        final EditText areaname = (EditText)dialogView.findViewById(R.id.addressareaedital);
+        final EditText apartmentname = (EditText)dialogView.findViewById(R.id.addressapartmentnameedital);
+        final EditText landmark = (EditText)dialogView.findViewById(R.id.addresslandmarkedital);
+        final EditText city = (EditText)dialogView.findViewById(R.id.addresscityedital);
+        final EditText pincode = (EditText)dialogView.findViewById(R.id.addresspincodeedital);
+        final EditText mobile = (EditText)dialogView.findViewById(R.id.addressmobileedital);
+            cancelAddress = (Button)dialogView.findViewById(R.id.cancelAddressal);
+        Button update = (Button)dialogView.findViewById(R.id.saveAddressal);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddressCommonClass aClass = new AddressCommonClass();
+                aClass.setAddnickname(nickname.getText().toString());
+                aClass.setAddpersoname(personname.getText().toString());
+                aClass.setAddhouseno(hoseno.getText().toString());
+                aClass.setAddstreetname(streetname.getText().toString());
+                aClass.setAddarea(areaname.getText().toString());
+                aClass.setAddapartmentno(apartmentname.getText().toString());
+                aClass.setAddlandmark(landmark.getText().toString());
+                aClass.setAddcity(city.getText().toString());
+                aClass.setAddpincode(pincode.getText().toString());
+                aClass.setAddmobile(mobile.getText().toString());
+
+
+                firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Address"+"/"+SSkey+"/"+SSkey);
+                firebase.push().setValue(aClass);
+                alertDialog.dismiss();
+                startActivity(getActivity().getIntent());
+                getActivity().finish();
+            }
+        });
+        cancelAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     private void profileData() {
         refreshdata();
     }
@@ -341,7 +368,6 @@ public class PlaceOrderFragment extends Fragment {
             aClass.setAddpincode(ds.getValue(AddressCommonClass.class).getAddpincode());
             aClass.setAddmobile(ds.getValue(AddressCommonClass.class).getAddmobile());
             commonClasses.add(aClass);
-
         }
         AddressAdapter addressAdapter = new AddressAdapter(getActivity(),commonClasses);
         orcoreview.setAdapter(addressAdapter);
@@ -353,8 +379,69 @@ public class PlaceOrderFragment extends Fragment {
 
         addressAdapter.SetOnItemClickListener(new AddressAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(final View view, int position) {
+                AlertDialog alertbox = new AlertDialog.Builder(getContext(),R.style.MyAlertDialogStyle)
+                        .setMessage("Do you want Choose this your Default address")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
+                            // do something when the button is clicked
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                //close();
+                                final AddressCommonClass aClass = new AddressCommonClass();
+                                view.setSelected(true);
+                                view.setBackgroundColor(Color.parseColor("#E5F1FB"));
+                                String aid = ((TextView)view.findViewById(R.id.aid)).getText().toString();
+                                String anName = ((TextView)view.findViewById(R.id.addressnickname)).getText().toString();
+                                String apname = ((TextView)view.findViewById(R.id.addressName)).getText().toString();
+                                String ahouseno = ((TextView)view.findViewById(R.id.addressHouseno)).getText().toString();
+                                String astreetno = ((TextView)view.findViewById(R.id.addressStreet)).getText().toString();
+                                String aArea = ((TextView)view.findViewById(R.id.addressArea)).getText().toString();
+                                String aApname = ((TextView)view.findViewById(R.id.addressAppartmentName)).getText().toString();
+                                String alandmark = ((TextView)view.findViewById(R.id.addressLandmark)).getText().toString();
+                                final String aCity = ((TextView)view.findViewById(R.id.addressCity)).getText().toString();
+                                String aPincode = ((TextView)view.findViewById(R.id.addressPincode)).getText().toString();
+                                String aMobile = ((TextView)view.findViewById(R.id.addressmobile)).getText().toString();
+                                aClass.setAddpid(aid);
+                                aClass.setAddnickname(anName);
+                                aClass.setAddpersoname(apname);
+                                aClass.setAddhouseno(ahouseno);
+                                aClass.setAddstreetname(astreetno);
+                                aClass.setAddarea(aArea);
+                                aClass.setAddapartmentno(aApname);
+                                aClass.setAddlandmark(alandmark);
+                                aClass.setAddcity(aCity);
+                                aClass.setAddpincode(aPincode);
+                                aClass.setAddmobile(aMobile);
+
+                                firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"ConfAddress"+"/"+SSkey+"/"+SSkey);
+                                firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for (DataSnapshot ds: dataSnapshot.getChildren()){
+                                                firebase.child(ds.getKey()).setValue(aClass);
+                                            }
+                                        }else {
+                                            firebase.push().child("").setValue(aClass);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+
+                                    }
+                                });
+
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                            // do something when the button is clicked
+                            public void onClick(DialogInterface dialog, int arg1) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -383,6 +470,15 @@ public class PlaceOrderFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.conaddNewaddress:
+                showAlertDailog();
+                break;
+        }
     }
 
     /**

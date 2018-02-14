@@ -199,6 +199,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     }
     public void SetOnItemClickListener(final AddressAdapter.OnItemClickListener itemClickListener) {
         this.clickListener = itemClickListener;
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements

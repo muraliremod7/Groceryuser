@@ -51,6 +51,7 @@ public class PlaceOrderAdapter extends RecyclerView.Adapter<PlaceOrderAdapter.Vi
         holder.deliverytime.setText(allCommonClasses.get(position).getOrdertime());
         holder.totalpayable.setText(allCommonClasses.get(position).getOrderpayableamount());
         holder.orderstatus.setText(allCommonClasses.get(position).getStatus());
+        holder.unid.setText(allCommonClasses.get(position).getUid());
     }
 
     @Override
@@ -87,11 +88,12 @@ public class PlaceOrderAdapter extends RecyclerView.Adapter<PlaceOrderAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
-        public TextView orderId, orderitems, deliverydate, deliverytime, totalpayable,orderstatus;
+        public TextView orderId, orderitems,unid, deliverydate, deliverytime, totalpayable,orderstatus;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            orderId = (TextView) itemView.findViewById(R.id.orderId);
+            orderId = (TextView) itemView.findViewById(R.id.singleorderId);
+            unid = (TextView) itemView.findViewById(R.id.singleunique);
             orderitems = (TextView) itemView.findViewById(R.id.orderItems);
             deliverydate = (TextView) itemView.findViewById(R.id.orderDeliveryDate);
             deliverytime = (TextView) itemView.findViewById(R.id.orderDeliveryTime);
@@ -102,7 +104,12 @@ public class PlaceOrderAdapter extends RecyclerView.Adapter<PlaceOrderAdapter.Vi
         }
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(view, getPosition());
+            try{
+                clickListener.onItemClick(view, getPosition());
+            }catch (NullPointerException e){
+
+            }
+
         }
     }
 }

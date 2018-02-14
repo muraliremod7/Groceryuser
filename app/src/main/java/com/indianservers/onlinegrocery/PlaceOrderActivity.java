@@ -7,15 +7,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.indianservers.onlinegrocery.fragment.PlaceOrderFragment;
 
-public class PlaceOrderActivity extends AppCompatActivity {
+public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener{
     private Firebase firebase;
     public static String datee,timee;
     FragmentPagerAdapter adapterViewPager;
+    public static TextView placeoption;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +29,7 @@ public class PlaceOrderActivity extends AppCompatActivity {
         Firebase.setAndroidContext(getApplicationContext());
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
-
+        placeoption = (TextView) findViewById(R.id.optionplace);
 
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
@@ -60,6 +64,12 @@ public class PlaceOrderActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+        }
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {

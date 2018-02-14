@@ -9,8 +9,18 @@ public class AddressCommonClass {
 
     }
 
-    public AddressCommonClass(String addpid, String addnickname, String addpersoname, String addhouseno, String addstreetname, String addarea, String addapartmentno, String addlandmark, String addcity, String addpincode,String addmobile) {
+    public String getLatlan() {
+        return latlan;
+    }
+
+    public void setLatlan(String latlan) {
+        this.latlan = latlan;
+    }
+
+    private String latlan;
+    public AddressCommonClass(String addpid, String latlan,String addnickname, String addpersoname, String addhouseno, String addstreetname, String addarea, String addapartmentno, String addlandmark, String addcity, String addpincode,String addmobile) {
         this.addpid = addpid;
+        this.latlan = latlan;
         this.addnickname = addnickname;
         this.addpersoname = addpersoname;
         this.addhouseno = addhouseno;

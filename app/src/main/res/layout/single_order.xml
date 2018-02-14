@@ -23,7 +23,15 @@
                 android:textStyle="bold"
                 android:textSize="15sp"/>
             <TextView
-                android:id="@+id/orderId"
+                android:id="@+id/singleorderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Order Id"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/singleunique"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Order Id"

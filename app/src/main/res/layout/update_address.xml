@@ -79,6 +79,16 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="15sp"/>
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelAddressal"
+            android:text="Cancel"
+            android:background="@color/buttoncolor"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="50dp"/>

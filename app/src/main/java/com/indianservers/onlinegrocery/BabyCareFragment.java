@@ -2,74 +2,79 @@ package com.indianservers.onlinegrocery;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.indianservers.onlinegrocery.R;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import adapter.GridAdapter;
-import model.AllCommonClass;
+import model.CenterRepository;
 import model.ProductCommonClass;
 
+/**
+ * Created by Ratan on 7/29/2015.
+ */
 public class BabyCareFragment extends Fragment {
-    private List<ProductCommonClass> arrayList = new ArrayList<>();
-    GridAdapter gridAdapter;
+    private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
+    private GridAdapter gridAdapter;
     public static SharedPreferences sskey;
-    RecyclerView gridview;
+    private RecyclerView gridview;
     String SSkey;
     private Firebase firebase;
     private ProgressDialog mProgressDialog;
-
     public BabyCareFragment() {
-        // Required empty public constructor
-    }
 
+    }
     public static BabyCareFragment newInstance() {
-        BabyCareFragment cakesDairy = new BabyCareFragment();
-        return cakesDairy;
+        BabyCareFragment fragment = new BabyCareFragment();
+        return fragment;
     }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_baby_care, container, false);
-        gridview = (RecyclerView) view.findViewById(R.id.babycaregridview);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_babycare,container,false);
+        gridview = (RecyclerView) view.findViewById(R.id.gormentgridview);
         gridview.setAlpha(0.9f);
+        sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SSkey = sskey.getString("sskey","0");
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setMessage("Please Wait...");
-        timerDelayRemoveDialog(15 * 1000, mProgressDialog);
+        timerDelayRemoveDialog(15*1000,mProgressDialog);
         mProgressDialog.show();
         Firebase.setAndroidContext(getContext());
-        firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/" + "BabyCare");
+        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/Products");
         refreshdata();
+        gridAdapter = new GridAdapter(getActivity(),arrayList);
+        gridview.setAdapter(gridAdapter);
+        gridAdapter.notifyDataSetChanged();
         return view;
     }
-
     public  void refreshdata() {
         firebase.child("BabyCare").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
             @Override
@@ -105,6 +110,7 @@ public class BabyCareFragment extends Fragment {
         }
         if(arrayList.size()>0)
         {
+            CenterRepository.getCenterRepository().setListOfProductsInShoppingList(arrayList);
             mProgressDialog.dismiss();
             gridAdapter = new GridAdapter(getActivity(), arrayList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
@@ -113,6 +119,7 @@ public class BabyCareFragment extends Fragment {
             gridview.setHasFixedSize(true);
             gridview.setAdapter(gridAdapter);
             gridAdapter.notifyDataSetChanged();
+
             gridAdapter.SetOnItemClickListener(new GridAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
@@ -123,7 +130,7 @@ public class BabyCareFragment extends Fragment {
                     final String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
                     final String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
                     final String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
-                    final String puid = ((TextView)view.findViewById(R.id.pruid)).getText().toString();
+                    final String puid = ((TextView)view.findViewById(R.id.pId)).getText().toString();
                     final String ppid = ((TextView)view.findViewById(R.id.ppid)).getText().toString();
                     final String prpq = ((TextView)view.findViewById(R.id.prpq)).getText().toString();
                     final String prfinalQunatity = ((TextView)view.findViewById(R.id.quantity)).getText().toString();
@@ -152,7 +159,6 @@ public class BabyCareFragment extends Fragment {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-
         }
     }
     public void timerDelayRemoveDialog(long time, final Dialog d){
@@ -161,5 +167,37 @@ public class BabyCareFragment extends Fragment {
                 d.dismiss();
             }
         }, time);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

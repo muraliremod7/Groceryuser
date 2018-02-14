@@ -1,9 +1,7 @@
 package adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import com.firebase.client.Firebase;
-import com.indianservers.onlinegrocery.CheckOutActivity;
 import com.indianservers.onlinegrocery.R;
 
 import java.util.ArrayList;
@@ -22,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import model.OrdersCommonClass;
-import model.ProductCommonClass;
 
 
 /**
@@ -33,7 +27,6 @@ public class CheckoutListviewAdapter extends RecyclerView.Adapter<CheckoutListvi
     public Activity activity;
     private Firebase firebase;
     private SharedPreferences sskey;
-    private ProductCommonClass productCommonClass;
     private LayoutInflater mInflater;
     public List<OrdersCommonClass> allCommonClasses = new ArrayList<>();
     SharedPreferences sharedPrefs;
@@ -67,24 +60,6 @@ public class CheckoutListviewAdapter extends RecyclerView.Adapter<CheckoutListvi
         holder.pPrice.setText("RS."+allCommonClasses.get(position).getPrPrice());
         holder.pQuantity.setText(allCommonClasses.get(position).getPrQunatity());
         holder.pmeasure.setText(allCommonClasses.get(position).getPrMeasure());
-        Glide.with(activity)
-                .load(allCommonClasses.get(position).getPimage())
-                .into(holder.pimage);
-
-        holder.deleteitem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sskey = PreferenceManager.getDefaultSharedPreferences(activity);
-                String SSkey = sskey.getString("uid","0");
-                firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"CartItems"+"/"+SSkey+"/"+SSkey);
-                firebase.child(allCommonClasses.get(position).getPruid()).removeValue();
-                onItemDismiss(position);
-                updateResults(allCommonClasses);
-                Intent intent = new Intent(activity, CheckOutActivity.class);
-                activity.startActivity(intent);
-                activity.finish();
-            }
-        });
     }
     public void updateResults(List<OrdersCommonClass> results) {
         this.allCommonClasses = results;
@@ -129,7 +104,6 @@ public class CheckoutListviewAdapter extends RecyclerView.Adapter<CheckoutListvi
             pQuantity = (TextView) itemView.findViewById(R.id.checkitemqu);
             pimage = (ImageView) itemView.findViewById(R.id.checkoutimage);
             pmeasure = (TextView)itemView.findViewById(R.id.checkitemmeasure);
-            deleteitem = (ImageView) itemView.findViewById(R.id.checkoutitem_delete);
             itemView.setOnClickListener(this);
         }
         @Override
@@ -137,7 +111,7 @@ public class CheckoutListviewAdapter extends RecyclerView.Adapter<CheckoutListvi
             try{
                 clickListener.onItemClick(view, getPosition());
             }catch (NullPointerException e){
-                e.printStackTrace();
+               e.printStackTrace();
             }
 
         }

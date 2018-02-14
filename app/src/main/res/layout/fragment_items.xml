@@ -12,49 +12,13 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorPrimary"
-            android:id="@+id/too"
-            app:layout_scrollFlags="scroll|enterAlways"
+            android:id="@+id/itemfragtoo"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/imageback"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/backstack" />
-
-                <TextView
-                    android:id="@+id/subcategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_toEndOf="@+id/imageback"
-                    android:layout_toRightOf="@+id/imageback"
-                    android:text="Kirana Mart"
-                    android:textColor="@color/white"
-                    android:textSize="17dp"
-                    android:textStyle="bold" />
-                <ImageView
-                    android:tint="#ffff"
-                    android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/singlecheckoutimage"
-                    android:src="@drawable/checkout"/>
-            </RelativeLayout>
-        </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
         <android.support.v7.widget.RecyclerView
             android:background="#E8E8E8"
             android:columnWidth="150dp"

@@ -1,7 +1,6 @@
 package com.indianservers.onlinegrocery;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -25,14 +23,14 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
-import adapter.CheckoutListviewAdapter;
+import adapter.CheckoutAdapter;
 import model.CenterRepository;
 import model.OrdersCommonClass;
 
 
 public class CheckOutActivity extends AppCompatActivity implements View.OnClickListener{
     private RecyclerView checkoutlistview;
-    public CheckoutListviewAdapter listCheckoutAdapter;
+    public CheckoutAdapter listCheckoutAdapter;
     public static SharedPreferences sskey;
     public String SSkey;
     public ArrayList<OrdersCommonClass> commonClasses = new ArrayList<>();
@@ -78,14 +76,14 @@ public class CheckOutActivity extends AppCompatActivity implements View.OnClickL
                         commonClasses.add(aClass);
                     }
                     CenterRepository.getCenterRepository().setListofAddress(commonClasses);
-                    listCheckoutAdapter = new CheckoutListviewAdapter(CheckOutActivity.this,commonClasses);
+                    listCheckoutAdapter = new CheckoutAdapter(CheckOutActivity.this,commonClasses);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                             getApplicationContext());
                     checkoutlistview.setLayoutManager(linearLayoutManager);
                     checkoutlistview.setHasFixedSize(true);
                     checkoutlistview.setAdapter(listCheckoutAdapter);
                     listCheckoutAdapter.notifyDataSetChanged();
-                    finalprice.setText("Rs. "+String.valueOf(itemsTotalCost));
+                    finalprice.setText(String.valueOf(itemsTotalCost));
 
                 }
                 else {
@@ -94,6 +92,7 @@ public class CheckOutActivity extends AppCompatActivity implements View.OnClickL
                     LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
                     final View dialogView = inflater.inflate(R.layout.start_shopping, null);
                     builder.setView(dialogView);
+                    builder.setCancelable(false);
                     final AlertDialog alertDialog = builder.create();
                     Button button = (Button)dialogView.findViewById(R.id.StartShopping);
                     button.setOnClickListener(new View.OnClickListener() {

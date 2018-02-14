@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#EF6C00</color>
     <color name="colorAccent">#4c521c</color>
     <color name="textcolor">#FFFFFF</color>
-    <color name="buttoncolor">#B5CA21</color>
+    <color name="buttoncolor">#80B5CA21</color>
 
     <color name="white">#FFF</color>
     <color name="black">#000</color>
-
+    <color name="pharmacylayoutcolor">#90CAF9</color>
+    <color name="serviceslayoutcolor">#EF9A9A</color>
     <color name="notification">#FEFEFE</color>
     <color name="textnotification">#FEFEFE</color>
 

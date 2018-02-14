@@ -18,7 +18,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +48,6 @@ import services.ConnectionDetector;
  * Created by Ratan on 7/29/2015.
  */
 public class MainFragment extends Fragment implements HomeFragment.OnFragmentInteractionListener,Categoriesfragment.OnFragmentInteractionListener,CheckoutFragment.OnFragmentInteractionListener{
-    Toolbar toolbar;
     ArrayList<String> actorsList;
 
     FragmentManager mFragmentManager;
@@ -59,7 +60,7 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
     public Handler handler = new Handler();
     public static AHBottomNavigation bottomNavigation;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
-//    String length = "0";
+    //    String length = "0";
     SharedPreferences.Editor editor;
     private AlertDialogManager manager;
     @Override
@@ -72,8 +73,6 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment_layout,container,false);
-        activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(toolbar);
         detector = new ConnectionDetector(getActivity());
         manager = new AlertDialogManager();
 
@@ -84,6 +83,7 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
         AHBottomNavigationItem item3 = new AHBottomNavigationItem("Checkout", R.drawable.checkout, R.color.buttoncolor);
 
 // Add items
+        bottomNavigationItems.clear();
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);
@@ -156,32 +156,8 @@ public class MainFragment extends Fragment implements HomeFragment.OnFragmentInt
 
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
-        inflater.inflate(R.menu.homefragmentmenu, menu);
-        MenuItem itemCart = menu.findItem(R.id.cart);
-        LayerDrawable icon = (LayerDrawable) itemCart.getIcon();
-        item =  PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String itemlength = item.getString("Length","0");
-        setBadgeCount(getActivity(), icon, itemlength);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.cart:
-                Intent intent = new Intent(getActivity(),CheckOutActivity.class);
-                startActivity(intent);
-                return false;
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
+
     public static void setBadgeCount(Context context, LayerDrawable icon, String count) {
 
         BadgeDrawable badge;

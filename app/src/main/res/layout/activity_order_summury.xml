@@ -1,0 +1,13 @@
+<LinearLayout
+    android:background="#B7B7B7"
+    android:visibility="visible"
+    android:id="@+id/ordersrecycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/productsrecycler" />
+</LinearLayout>

@@ -60,13 +60,9 @@
         <!-- Your Scrollable View -->
         <include layout="@layout/categorysdesign" />
         <FrameLayout
-            android:layout_marginTop="60dp"
             android:id="@+id/categorysframelayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
-
-
-
 </android.support.v4.widget.DrawerLayout>

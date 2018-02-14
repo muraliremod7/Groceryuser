@@ -2,38 +2,42 @@ package com.indianservers.onlinegrocery;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adapter.GridAdapter;
 import model.CenterRepository;
 import model.ProductCommonClass;
-import model.ProfileCommonClass;
-import model.entities.Product;
 
-/**
- * Created by Ratan on 7/29/2015.
- */
-public class GourmentworldfoodFragment extends Fragment {
+
+public class PatanjaliFragment extends Fragment {
     private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
     private GridAdapter gridAdapter;
     public static SharedPreferences sskey;
@@ -41,17 +45,26 @@ public class GourmentworldfoodFragment extends Fragment {
     String SSkey;
     private Firebase firebase;
     private ProgressDialog mProgressDialog;
-    public GourmentworldfoodFragment() {
+
+    public PatanjaliFragment() {
 
     }
-    public static GourmentworldfoodFragment newInstance() {
-        GourmentworldfoodFragment fragment = new GourmentworldfoodFragment();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    // TODO: Rename and change types and number of parameters
+    public static PatanjaliFragment newInstance() {
+        PatanjaliFragment fragment = new PatanjaliFragment();
         return fragment;
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gourmentworldfood,container,false);
-        gridview = (RecyclerView) view.findViewById(R.id.gormentgridview);
+    public View onCreateView(LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_patanjali, container, false);
+        gridview = (RecyclerView) view.findViewById(R.id.patanjaligridview);
         gridview.setAlpha(0.9f);
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SSkey = sskey.getString("sskey","0");
@@ -60,7 +73,7 @@ public class GourmentworldfoodFragment extends Fragment {
         timerDelayRemoveDialog(15*1000,mProgressDialog);
         mProgressDialog.show();
         Firebase.setAndroidContext(getContext());
-        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"GourmetWorldFood");
+        firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"Patanjali");
         refreshdata();
         gridAdapter = new GridAdapter(getActivity(),arrayList);
         gridview.setAdapter(gridAdapter);
@@ -68,7 +81,7 @@ public class GourmentworldfoodFragment extends Fragment {
         return view;
     }
     public  void refreshdata() {
-        firebase.child("GourmetWorldFood").orderByChild("ppid").addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
+        firebase.child("Patanjali").orderByChild("ppid").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getupdates(dataSnapshot);
@@ -98,7 +111,6 @@ public class GourmentworldfoodFragment extends Fragment {
             d.setProductMeasureType(ds.getValue(ProductCommonClass.class).getProductMeasureType());
             d.setPrqu(ds.getValue(ProductCommonClass.class).getPrqu());
             arrayList.add(d);
-
         }
         if(arrayList.size()>0)
         {
@@ -111,7 +123,6 @@ public class GourmentworldfoodFragment extends Fragment {
             gridview.setHasFixedSize(true);
             gridview.setAdapter(gridAdapter);
             gridAdapter.notifyDataSetChanged();
-
             gridAdapter.SetOnItemClickListener(new GridAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
@@ -122,7 +133,7 @@ public class GourmentworldfoodFragment extends Fragment {
                     final String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
                     final String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
                     final String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
-                    final String puid = ((TextView)view.findViewById(R.id.pruid)).getText().toString();
+                    final String puid = ((TextView)view.findViewById(R.id.pId)).getText().toString();
                     final String ppid = ((TextView)view.findViewById(R.id.ppid)).getText().toString();
                     final String prpq = ((TextView)view.findViewById(R.id.prpq)).getText().toString();
                     final String prfinalQunatity = ((TextView)view.findViewById(R.id.quantity)).getText().toString();
@@ -151,6 +162,7 @@ public class GourmentworldfoodFragment extends Fragment {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+
         }
     }
     public void timerDelayRemoveDialog(long time, final Dialog d){
@@ -159,5 +171,37 @@ public class GourmentworldfoodFragment extends Fragment {
                 d.dismiss();
             }
         }, time);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

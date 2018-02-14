@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.indianservers.onlinegrocery">
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -12,9 +14,11 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true"/>
+        android:required="true" />
+
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -49,7 +53,11 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemee" />
+            android:theme="@style/AppThemee" >
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".SingleItemActivity"
             android:screenOrientation="portrait"
@@ -64,7 +72,13 @@
         <activity
             android:name=".PharmacyActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ProceedPharmacyActivity"
+        <activity
+            android:name=".ProceedPharmacyActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".OrderSummuryActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CheckupActivity"
             android:theme="@style/AppTheme"></activity>
     </application>
 

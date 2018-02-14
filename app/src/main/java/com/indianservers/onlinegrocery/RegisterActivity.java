@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.registerbutton:
                 progressBar.show();
-                String emailreg = email.getText().toString().trim();
+                String emailreg = email.getText().toString().toLowerCase().trim();
                 String passwordreg = password.getText().toString().trim();
 
                 if (TextUtils.isEmpty(emailreg)) {

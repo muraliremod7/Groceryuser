@@ -2,15 +2,23 @@ package com.indianservers.onlinegrocery;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -47,6 +55,11 @@ public class BeautyAndHygenieFragment extends Fragment {
     public static BeautyAndHygenieFragment newInstance() {
         BeautyAndHygenieFragment fragment = new BeautyAndHygenieFragment();
         return fragment;
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -119,7 +132,7 @@ public class BeautyAndHygenieFragment extends Fragment {
                     final String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
                     final String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
                     final String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
-                    final String puid = ((TextView)view.findViewById(R.id.pruid)).getText().toString();
+                    final String puid = ((TextView)view.findViewById(R.id.pId)).getText().toString();
                     final String ppid = ((TextView)view.findViewById(R.id.ppid)).getText().toString();
                     final String prpq = ((TextView)view.findViewById(R.id.prpq)).getText().toString();
                     final String prfinalQunatity = ((TextView)view.findViewById(R.id.quantity)).getText().toString();
@@ -156,5 +169,37 @@ public class BeautyAndHygenieFragment extends Fragment {
                 d.dismiss();
             }
         }, time);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

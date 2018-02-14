@@ -29,6 +29,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import model.CenterRepository;
 import model.OrdersCommonClass;
 import model.ProductCommonClass;
@@ -46,7 +47,7 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
     private static String Quantity,ppid,ProductMeasure,Productpr;
     public String FinalPrice;
     String category;
-    String uid;
+    String uid,qu;
     private List<ProductCommonClass> classes = new ArrayList<>();
     private Firebase firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"listOfItems"+"/"+uid);
     OrdersCommonClass commonClass;
@@ -77,6 +78,11 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
         final Intent intent = getIntent();
         Pname = intent.getStringExtra("pname");
         PPrice = intent.getStringExtra("pdprice");
+        if(PPrice.equals("")){
+            PPrice = intent.getStringExtra("pprice");
+        }else {
+
+        }
         Pdesc = intent.getStringExtra("pdesc");
         Pid = intent.getStringExtra("puid");
         Quantity = intent.getStringExtra("quantity");
@@ -84,6 +90,7 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
         ppid = intent.getStringExtra("ppid");
         Pimage = intent.getStringExtra("imgurl");
         singleQunatity.setText(intent.getStringExtra("quantity"));
+        qu = intent.getStringExtra("quantity");
         productName.setText(Pname);
         productPrice.setText(PPrice);
         prodctDescription.setText(Pdesc);
@@ -192,7 +199,6 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
 
                 break;
             case R.id.singleaddtoCart:
-
                 commonClass = new OrdersCommonClass();
                 commonClass.setPrpid(ppid);
                 commonClass.setPruid(Pid);
@@ -202,16 +208,16 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
                 commonClass.setPimage(Pimage);
                 commonClass.setPrQunatity(Quantity);
                 commonClass.setPrMeasure(ProductMeasure);
-                if(Quantity.equals("0")){
-                    Toast.makeText(SingleItemActivity.this,"You didn't Select item",Toast.LENGTH_SHORT).show();
+                String s = "0";
+                if(Quantity.equals(s)){
+                    Toasty.error(SingleItemActivity.this,"You didn't Select item",Toast.LENGTH_SHORT).show();
 
-                }else{
+                }else if(qu.equals(s)){
                     firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"CartItems"+"/"+uid);
-                    firebase.child(uid).orderByChild(Pid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    firebase.child(uid).child(Pid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
-
                                 firebase.child(uid).push().setValue(commonClass);
                                 Toast.makeText(SingleItemActivity.this,"Item Added To Cart",Toast.LENGTH_SHORT).show();
                             }else {
@@ -220,14 +226,36 @@ public class SingleItemActivity extends AppCompatActivity implements View.OnClic
                                     String puid = ds.getValue(OrdersCommonClass.class).getPruid();
                                     if(puid.equals(Pid)){
                                         firebase.child(uid).child(key).setValue(commonClass);
+                                        Toast.makeText(SingleItemActivity.this,"Item Added To Cart",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
-
-
+                        }
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
 
                         }
+                    });
+                }else{
+                    firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"CartItems"+"/"+uid);
+                    firebase.child(uid).orderByChild(Pid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+                                firebase.child(uid).push().setValue(commonClass);
+                                Toast.makeText(SingleItemActivity.this,"Item Added To Cart",Toast.LENGTH_SHORT).show();
+                            }else {
+                                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                                    String key = ds.getKey();
+                                    String puid = ds.getValue(OrdersCommonClass.class).getPruid();
+                                    if(puid.equals(Pid)){
+                                        firebase.child(uid).child(key).setValue(commonClass);
+                                        Toast.makeText(SingleItemActivity.this,"Item Added To Cart",Toast.LENGTH_SHORT).show();
 
+                                    }
+                                }
+                            }
+                        }
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
 

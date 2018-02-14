@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -163,7 +164,10 @@ public class MyOrdersFragment extends Fragment implements View.OnClickListener{
         orderAdapter.SetOnItemClickListener(new AddressAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                String uid = ((TextView)view.findViewById(R.id.singleunique)).getText().toString();
+                Intent intent = new Intent(getContext(),OrderSummuryActivity.class);
+                intent.putExtra("id",uid);
+                startActivity(intent);
             }
         });
 

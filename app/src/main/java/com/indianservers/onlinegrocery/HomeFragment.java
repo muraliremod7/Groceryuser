@@ -3,6 +3,7 @@ package com.indianservers.onlinegrocery;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,9 +11,13 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +121,15 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         LinearLayout eggs = (LinearLayout) view.findViewById(R.id.eggs);
         eggs.setOnClickListener(this);
+
+        LinearLayout deosandperfumes = (LinearLayout) view.findViewById(R.id.deosandperfumes);
+        deosandperfumes.setOnClickListener(this);
+
+        LinearLayout patanjali = (LinearLayout) view.findViewById(R.id.patanjali);
+        patanjali.setOnClickListener(this);
+
+        LinearLayout vitaminc = (LinearLayout) view.findViewById(R.id.vitaminc);
+        vitaminc.setOnClickListener(this);
         ImageView pharmacy = (ImageView)view.findViewById(R.id.pharmacy);
         pharmacy.setOnClickListener(this);
 
@@ -124,10 +138,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             collapsingToolbarLayout.setTitle("Grocery");
             //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
-
-
         }
-
         for(String name : HashMapForURL.keySet()){
 
             TextSliderView textSliderView = new TextSliderView(getContext());
@@ -198,7 +209,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -215,6 +225,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.replace(R.id.containerView, new ItemsFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             case R.id.foodgrains:
@@ -224,6 +235,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fg = getFragmentManager();
                 FragmentTransaction fgt = fg.beginTransaction();
                 fgt.replace(R.id.containerView, new ItemsFragment());
+                fgt.addToBackStack(null);
                 fgt.commit();
                 break;
             case R.id.bakery:
@@ -233,6 +245,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgbk = getFragmentManager();
                 FragmentTransaction fgtbk = fgbk.beginTransaction();
                 fgtbk.replace(R.id.containerView, new ItemsFragment());
+                fgtbk.addToBackStack(null);
                 fgtbk.commit();
                 break;
             case R.id.beverges:
@@ -242,6 +255,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgbe = getFragmentManager();
                 FragmentTransaction fgtbe = fgbe.beginTransaction();
                 fgtbe.add(R.id.containerView, new ItemsFragment());
+                fgtbe.addToBackStack(null);
                 fgtbe.commit();
                 break;
             case R.id.brandedfood:
@@ -251,6 +265,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgbf = getFragmentManager();
                 FragmentTransaction fgtbf = fgbf.beginTransaction();
                 fgtbf.add(R.id.containerView, new ItemsFragment());
+                fgtbf.addToBackStack(null);
                 fgtbf.commit();
                 break;
             case R.id.beauty:
@@ -260,6 +275,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgbu = getFragmentManager();
                 FragmentTransaction fgtbu = fgbu.beginTransaction();
                 fgtbu.add(R.id.containerView, new ItemsFragment());
+                fgtbu.addToBackStack(null);
                 fgtbu.commit();
                 break;
             case R.id.household:
@@ -269,15 +285,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgh = getFragmentManager();
                 FragmentTransaction fgth = fgh.beginTransaction();
                 fgth.replace(R.id.containerView, new ItemsFragment());
+                fgth.addToBackStack(null);
                 fgth.commit();
                 break;
             case R.id.gourment:
                 editor = sskey.edit();
-                editor.putString("categoryType","GourmetWorldFood");
+                editor.putString("categoryType","BabyCare");
                 editor.commit();
                 FragmentManager fgg = getFragmentManager();
                 FragmentTransaction fgtg = fgg.beginTransaction();
                 fgtg.add(R.id.containerView, new ItemsFragment());
+                fgtg.addToBackStack(null);
                 fgtg.commit();
                 break;
             case R.id.eggs:
@@ -287,7 +305,38 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 FragmentManager fgeg = getFragmentManager();
                 FragmentTransaction fgteg = fgeg.beginTransaction();
                 fgteg.add(R.id.containerView, new ItemsFragment());
+                fgteg.addToBackStack(null);
                 fgteg.commit();
+                break;
+            case R.id.deosandperfumes:
+                editor = sskey.edit();
+                editor.putString("categoryType","DeosAndPerfumes");
+                editor.commit();
+                FragmentManager fgdp = getFragmentManager();
+                FragmentTransaction fgtdp = fgdp.beginTransaction();
+                fgtdp.add(R.id.containerView, new ItemsFragment());
+                fgtdp.addToBackStack(null);
+                fgtdp.commit();
+                break;
+            case R.id.patanjali:
+                editor = sskey.edit();
+                editor.putString("categoryType","Patanjali");
+                editor.commit();
+                FragmentManager fgpa = getFragmentManager();
+                FragmentTransaction fgtpa = fgpa.beginTransaction();
+                fgtpa.add(R.id.containerView, new ItemsFragment());
+                fgtpa.addToBackStack(null);
+                fgtpa.commit();
+                break;
+            case R.id.vitaminc:
+                editor = sskey.edit();
+                editor.putString("categoryType","Vitamin-c");
+                editor.commit();
+                FragmentManager fgvi = getFragmentManager();
+                FragmentTransaction fgtvi = fgvi.beginTransaction();
+                fgtvi.add(R.id.containerView, new ItemsFragment());
+                fgtvi.addToBackStack(null);
+                fgtvi.commit();
                 break;
             case R.id.pharmacy:
                 Intent intent = new Intent(getActivity(),PharmacyActivity.class);

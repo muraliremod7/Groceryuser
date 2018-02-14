@@ -1,6 +1,7 @@
 package adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.preference.PreferenceManager;
@@ -9,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import model.CenterRepository;
 import model.OrdersCommonClass;
@@ -32,25 +37,27 @@ import model.ProductCommonClass;
  * Created by Hari Prahlad on 05-06-2016.
  */
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> implements
-        ItemTouchHelperAdapter {
-    public Activity activity;
+        ItemTouchHelperAdapter,Filterable {
+    public Context activity;
     private Firebase firebase;
     private SharedPreferences sskey;
     private ProductCommonClass productCommonClass;
-    private List<ProductCommonClass> productList = new ArrayList<ProductCommonClass>();
-    List<ProductCommonClass> commonClasses = new ArrayList<ProductCommonClass>();
+    private List<ProductCommonClass> productList;
+    private List<ProductCommonClass> mFilteredList;
     private LayoutInflater mInflater;
     public List<ProductCommonClass> allCommonClasses;
     SharedPreferences sharedPrefs;
+    int finalprice;
+    ViewHolder holderr;
     private OnItemClickListener clickListener;
     int count;
     String uid;
 
-    public GridAdapter(Activity activity, List<ProductCommonClass> allCommonClasses) {
-        this.allCommonClasses = allCommonClasses;
-        mInflater = LayoutInflater.from(activity);
-        productList = CenterRepository.getCenterRepository().getListOfProductsInShoppingList();
+    public GridAdapter(Context activity, List<ProductCommonClass> allCommonClasses) {
         this.activity = activity;
+        this.allCommonClasses = allCommonClasses;
+        this.productList = allCommonClasses;
+        this.mFilteredList = allCommonClasses;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         uid = sharedPrefs.getString("uid", "0");
     }
@@ -66,55 +73,57 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(
                 R.layout.grid_single, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
     @Override
     public int getItemCount() {
-        return productList == null ? 0 : productList.size();
+        return mFilteredList.size() ;
     }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
-        holder.pId.setText(productList.get(position).getPpid());
-        holder.puid.setText(productList.get(position).getPuid());
-        holder.pName.setText(productList.get(position).getProductName());
-        holder.pPrice.setText(productList.get(position).getProductPrice());
-        holder.pdprice.setText(productList.get(position).getProductdPrice());
-        if(productList.get(position).getProductdPrice().equals("")){
+        final  ProductCommonClass commonClass = mFilteredList.get(position);
+        holder.pId.setText(commonClass.getPuid());
+        holder.ppid.setText(commonClass.getPpid());
+        holder.pName.setText(commonClass.getProductName());
+        holder.pPrice.setText(commonClass.getProductPrice());
+        holder.pdprice.setText(commonClass.getProductdPrice());
+        if(commonClass.getProductdPrice().equals("")){
             holder.rs.setVisibility(View.GONE);
+            holder.pPrice.setPaintFlags(holder.pPrice.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
         }else {
+            holder.rs.setVisibility(View.VISIBLE);
             holder.pPrice.setPaintFlags(holder.pPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
-        holder.pdesc.setText(productList.get(position).getProductDesc());
-        holder.pQuantity.setText(productList.get(position).getProductQuantity());
-        holder.pMeasure.setText(productList.get(position).getProductMeasureType());
+        holder.pdesc.setText(commonClass.getProductDesc());
+        holder.pQuantity.setText(commonClass.getProductQuantity());
+        holder.pMeasure.setText(commonClass.getProductMeasureType());
         try{
             holder.quantity.setText(CenterRepository.getCenterRepository()
                     .getListOfProductsInShoppingList().get(position).getPrqu());
         }catch (IndexOutOfBoundsException e){
 
         }
-        holder.pimageUrl.setText(productList.get(position).getProductImage());
-        Picasso.with(activity)
-                .load(productList.get(position).getProductImage())
-                .into(holder.pimage);
+        holder.pimageUrl.setText(commonClass.getProductImage());
+        if(commonClass.getProductImage().equals("")){
+
+        }else {
+            Picasso.with(activity)
+                    .load(commonClass.getProductImage())
+                    .into(holder.pimage);
+        }
         holder.plus.findViewById(R.id.plus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProductCommonClass tempObj = productList.get(position);
-                if (CenterRepository.getCenterRepository()
-                        .getListOfProductsInShoppingList().contains(tempObj)) {
+                ProductCommonClass tempObj = mFilteredList.get(position);
+                if (allCommonClasses.contains(tempObj)) {
 
                     //get position of current item in shopping list
-                    int indexOfTempInShopingList = CenterRepository
-                            .getCenterRepository().getListOfProductsInShoppingList()
+                    int indexOfTempInShopingList = allCommonClasses
                             .indexOf(tempObj);
 
                     // update quanity in shopping list
-                    CenterRepository
-                            .getCenterRepository()
-                            .getListOfProductsInShoppingList()
+                    allCommonClasses
                             .get(indexOfTempInShopingList)
                             .setPrqu(
                                     String.valueOf(Integer
@@ -130,8 +139,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
 
                     holder.quantity.setText(tempObj.getPrqu());
 
-                    CenterRepository.getCenterRepository()
-                            .getListOfProductsInShoppingList().add(tempObj);
+                    allCommonClasses.add(tempObj);
 
                 }
             }
@@ -139,31 +147,26 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
         holder.minus.findViewById(R.id.minus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProductCommonClass tempObj = (productList).get(position);
+                ProductCommonClass tempObj = (mFilteredList).get(position);
 
-                if (CenterRepository.getCenterRepository().getListOfProductsInShoppingList()
+                if (allCommonClasses
                         .contains(tempObj)) {
 
-                    int indexOfTempInShopingList = CenterRepository
-                            .getCenterRepository().getListOfProductsInShoppingList()
+                    int indexOfTempInShopingList = allCommonClasses
                             .indexOf(tempObj);
 
                     if (Integer.valueOf(tempObj.getPrqu()) != 0) {
 
-                        CenterRepository
-                                .getCenterRepository()
-                                .getListOfProductsInShoppingList()
+                        allCommonClasses
                                 .get(indexOfTempInShopingList)
                                 .setPrqu(
                                         String.valueOf(Integer.valueOf(tempObj
                                                 .getPrqu()) - 1));
 
-                        holder.quantity.setText(CenterRepository
-                                .getCenterRepository().getListOfProductsInShoppingList()
+                        holder.quantity.setText(allCommonClasses
                                 .get(indexOfTempInShopingList).getPrqu());
 
-                        if (Integer.valueOf(CenterRepository
-                                .getCenterRepository().getListOfProductsInShoppingList()
+                        if (Integer.valueOf(allCommonClasses
                                 .get(indexOfTempInShopingList).getPrqu()) == 0) {
 
                             notifyDataSetChanged();
@@ -182,16 +185,21 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
             @Override
             public void onClick(View v) {
                 OrdersCommonClass commonClass = new OrdersCommonClass();
-                ProductCommonClass aClasss = productList.get(position);
-                commonClass.setPrpid(productList.get(position).getPpid());
-                commonClass.setPruid(productList.get(position).getPuid());
-                commonClass.setPrName(productList.get(position).getProductName());
-                commonClass.setPimage(productList.get(position).getProductImage());
-                int finalprice = Integer.parseInt(productList.get(position).getPrqu())*Integer.parseInt(productList.get(position).getProductdPrice());
+                ProductCommonClass aClasss = mFilteredList.get(position);
+                commonClass.setPrpid(aClasss.getPpid());
+                commonClass.setPruid(aClasss.getPuid());
+                commonClass.setPrName(aClasss.getProductName());
+                commonClass.setPimage(aClasss.getProductImage());
+                if(aClasss.getProductdPrice().equals("")){
+                    finalprice = Integer.parseInt(aClasss.getPrqu())*Integer.parseInt(aClasss.getProductPrice());
+
+                }else {
+                    finalprice = Integer.parseInt(aClasss.getPrqu())*Integer.parseInt(aClasss.getProductdPrice());
+                }
                 commonClass.setPrPrice(String.valueOf(finalprice));
-                commonClass.setPrQunatity(productList.get(position).getPrqu());
-                commonClass.setPrMeasure(productList.get(position).getProductMeasureType());
-                if(productList.get(position).getPrqu().equals("0")){
+                commonClass.setPrQunatity(aClasss.getPrqu());
+                commonClass.setPrMeasure(aClasss.getProductMeasureType());
+                if(aClasss.getPrqu().equals("0")){
                     Toast.makeText(activity,"You didn't Select item",Toast.LENGTH_SHORT).show();
                 }else{
                     firebase = new Firebase("https://online-grocery-88ba4.firebaseio.com/"+"CartItems"+"/"+uid);
@@ -212,16 +220,53 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(productList, i, i + 1);
+                Collections.swap(mFilteredList, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(productList, i, i - 1);
+                Collections.swap(mFilteredList, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
     }
+    @Override
+    public Filter getFilter() {
 
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+
+                    mFilteredList = productList;
+                } else {
+
+                    ArrayList<ProductCommonClass> filteredList = new ArrayList<>();
+
+                    for (ProductCommonClass androidVersion : productList) {
+
+                        if (androidVersion.getProductName().contains(charString) || androidVersion.getPpid().contains(charString)) {
+
+                            filteredList.add(androidVersion);
+                        }
+                    }
+                    mFilteredList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredList = (ArrayList<ProductCommonClass>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
     @Override
     public void onItemDismiss(int position) {
         productList.remove(position);
@@ -234,7 +279,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
 
     class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
-        public TextView pId, puid, pName, pPrice, pdprice, pQuantity, pMeasure, pdesc, pimageUrl;
+        public TextView pId,ppid, puid, pName, pPrice, pdprice, pQuantity, pMeasure, pdesc, pimageUrl;
         private TextView quantity;
         TextView plus;
         TextView minus;
@@ -244,6 +289,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
         public ViewHolder(View itemView) {
             super(itemView);
             pId = (TextView) itemView.findViewById(R.id.pId);
+            ppid = (TextView) itemView.findViewById(R.id.ppid);
             pName = (TextView) itemView.findViewById(R.id.productname);
             puid = (TextView) itemView.findViewById(R.id.pruid);
             pPrice = (TextView) itemView.findViewById(R.id.vendoreprice);

@@ -41,7 +41,7 @@ public class SplashActivity extends Activity {
             this.setContentView(R.layout.activity_splash);
             handler.sendEmptyMessageDelayed(0, 2000);
             RelativeLayout loginrelative = (RelativeLayout) findViewById(R.id.spalsh);
-            loginrelative.setAlpha(0.9f);
+            loginrelative.setAlpha(0.8f);
         }
 
     }

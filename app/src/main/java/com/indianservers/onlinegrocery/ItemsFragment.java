@@ -1,21 +1,30 @@
 package com.indianservers.onlinegrocery;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,6 +35,7 @@ import android.widget.Toast;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 
@@ -34,7 +44,7 @@ import model.CenterRepository;
 import model.ProductCommonClass;
 
 
-public class ItemsFragment extends Fragment implements View.OnClickListener{
+public class ItemsFragment extends Fragment{
     private ArrayList<ProductCommonClass> arrayList = new ArrayList<ProductCommonClass>();
     private SharedPreferences sskey;
     private String type;
@@ -43,6 +53,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
     private Firebase firebase;
     private GridAdapter gridAdapter;
     private ImageView imageView, singlecheckout;
+    Toolbar toolbarbe;
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -55,7 +66,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -67,15 +78,14 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_items, container, false);
         sskey = PreferenceManager.getDefaultSharedPreferences(getActivity());
         type = sskey.getString("categoryType","0");
-        Toolbar toolbarbe = (Toolbar)getActivity().findViewById(R.id.maintoolbar);
+        toolbarbe = (Toolbar)getActivity().findViewById(R.id.maintoolbar);
         toolbarbe.setVisibility(View.GONE);
-        RelativeLayout toolbar = (RelativeLayout) view.findViewById(R.id.too);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.itemfragtoo);
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        activity.setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         allitemsList = (RecyclerView)view.findViewById(R.id.allitemsGridview);
         allitemsList.setAlpha(0.9f);
-        imageView = (ImageView)view.findViewById(R.id.imageback);
-        imageView.setOnClickListener(this);
-        singlecheckout = (ImageView)view.findViewById(R.id.singlecheckoutimage);
-        singlecheckout.setOnClickListener(this);
 
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setMessage("Please Wait...");
@@ -86,9 +96,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
 
         firebase=new Firebase("https://online-grocery-88ba4.firebaseio.com/"+type);
         refreshdata();
-        gridAdapter = new GridAdapter(getActivity(),arrayList);
-        allitemsList.setAdapter(gridAdapter);
-        gridAdapter.notifyDataSetChanged();
         return view;
     }
     public  void refreshdata() {
@@ -132,7 +139,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                     getActivity().getBaseContext());
             allitemsList.setLayoutManager(linearLayoutManager);
-            allitemsList.setHasFixedSize(true);
             allitemsList.setAdapter(gridAdapter);
             gridAdapter.notifyDataSetChanged();
 
@@ -146,7 +152,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
                     final String prmeasure = ((TextView)view.findViewById(R.id.cartmeasure)).getText().toString();
                     final String prdesc = ((TextView)view.findViewById(R.id.productDesc)).getText().toString();
                     final String primageUrl = ((TextView)view.findViewById(R.id.primageUrl)).getText().toString();
-                    final String puid = ((TextView)view.findViewById(R.id.pruid)).getText().toString();
+                    final String puid = ((TextView)view.findViewById(R.id.pId)).getText().toString();
                     final String ppid = ((TextView)view.findViewById(R.id.ppid)).getText().toString();
                     final String prpq = ((TextView)view.findViewById(R.id.prpq)).getText().toString();
                     final String prfinalQunatity = ((TextView)view.findViewById(R.id.quantity)).getText().toString();
@@ -168,23 +174,56 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
 
         }else
         {
-            gridAdapter = new GridAdapter(getActivity(),arrayList);
-            try{
-                allitemsList.setAdapter(gridAdapter);
-                mProgressDialog.dismiss();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
+
         }
     }
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
 
-        } else {
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                gridAdapter.getFilter().filter(query);
+                gridAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
 
-        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                gridAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                gridAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -193,21 +232,14 @@ public class ItemsFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.singlecheckoutimage:
-                Intent checkoutintent = new Intent(getActivity(),CheckOutActivity.class);
-                startActivity(checkoutintent);
-                break;
-            case R.id.imageback:
-                FragmentManager fgbe = getFragmentManager();
-                FragmentTransaction fgtbe = fgbe.beginTransaction();
-                fgtbe.add(R.id.containerView, new HomeFragment());
-                fgtbe.commit();
-                Toolbar toolbarr = (Toolbar)getActivity().findViewById(R.id.maintoolbar);
-                toolbarr.setVisibility(View.VISIBLE);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                toolbarbe.setVisibility(View.VISIBLE);
+                getActivity().getSupportFragmentManager().popBackStackImmediate() ;
                 break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public interface OnFragmentInteractionListener {
